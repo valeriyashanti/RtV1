@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/06 18:25:08 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/06 18:37:19 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int ray (int j, int i, t_obj *obj, t_rt *rt)
 	//t_vec3 oc;
 	//oc = vec_plus(obj->dot, vec_mul(rt->cam, -1));
 
-	//t_vec3 d;
-	//d = vec_plus(l, rt->cam);
+	t_vec3 d;
+	d = vec_plus(l, vec_mul(rt->cam, -1));
 	
-	k1 = vec_sc(l, l);
-	k2 = 2 * vec_sc(obj->oc, l);
+	k1 = vec_sc(d, d);
+	k2 = 2 * vec_sc(obj->oc, d);
 	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);
 
 	double desc = k2 * k2 - 4 * k1 * k3;
@@ -128,38 +128,49 @@ int		exit_x(int a)
 
 int		deal_key(int key, t_rt *rt)
 {
-	/* if (key == 126)
+	if (key == 126)
 	{
-		rt->move.x = 20;
-		rt->move.y = 0;
+		rt->move.x = 0;
+		rt->move.y = 0.1;
 		rt->move.z = 0;
 		rt->cam = vec_plus(rt->cam, rt->move);
-		printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
 	}
 	if (key == 125)
 	{
-		rt->move.x = -20;
-		rt->move.y = 0;
+		rt->move.x = 0;
+		rt->move.y = -0.1;
 		rt->move.z = 0;
 		rt->cam = vec_plus(rt->cam, rt->move);
-		printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
 	}
 	if (key == 123)
 	{
-		rt->move.x = 0;
+		rt->move.x = 0.1;
 		rt->move.y = 0;
-		rt->move.z = 20;
+		rt->move.z = 0;
 		rt->cam = vec_plus(rt->cam, rt->move);
-		printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
 	}
 	if (key == 124)
 	{
+		rt->move.x = -0.1;
+		rt->move.y = 0;
+		rt->move.z = 0;
+		rt->cam = vec_plus(rt->cam, rt->move);
+		//printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
+	}
+	if (key == 69)
+	{
 		rt->move.x = 0;
 		rt->move.y = 0;
-		rt->move.z = -20;
+		rt->move.z = -0.1;
 		rt->cam = vec_plus(rt->cam, rt->move);
-		printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
-	} */
+	}
+	if (key == 78)
+	{
+		rt->move.x = 0;
+		rt->move.y = 0;
+		rt->move.z = 0.1;
+		rt->cam = vec_plus(rt->cam, rt->move);
+	}
 	if (key == 53)
 		exit_x(1);
 	mlx_clear_window(rt->mlx_ptr, rt->win_ptr);
