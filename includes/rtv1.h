@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/06 18:12:51 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/06 19:05:41 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,14 @@ typedef struct  s_obj
 {
 	t_vec3      dot;
 	t_vec3		oc;
-	double		radius;    
-}               t_obj;
+	double		radius;
+}				t_obj;
 
+typedef struct	s_min_t
+{
+	double		res;
+	int			color;
+}				t_min_t;
 typedef struct  s_rt
 {
 	void		*mlx_ptr;
