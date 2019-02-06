@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/06 18:37:19 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/06 19:13:32 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,19 @@ int ray (int j, int i, t_obj *obj, t_rt *rt)
 	t2 = (k2 + sqrt(desc)) / (2 * k1);
 
 	double res = -1;
-	
-	if(t1>=1 && t1<= INFINITY)
+	if (t1 >= 1 && t1 <= INFINITY)
 		res = t1;
 	if (res >= 0)
 	{
-		if(t2 >=1 && t2<= INFINITY && t2 <res)
+		if (t2 >=1 && t2<= INFINITY && t2 < res)
 			res = t2;
 	}
 	else
 	{
-		if(t2 >=1 && t2<= INFINITY)
+		if (t2 >=1 && t2<= INFINITY)
 			res = t2;
 	}
-	if (res != -1)
-		return (1);
-	return (0);
+	return (res);
 }
 
 void	rtv1(t_rt *rt)
@@ -68,6 +65,11 @@ void	rtv1(t_rt *rt)
 	int i;
 	int j;
 	int r;
+	int res;
+	int res0;
+	int k;
+
+	t_min_t mint;
 
 	t_obj s;
 	s.dot.x = 0;
@@ -83,10 +85,10 @@ void	rtv1(t_rt *rt)
 	s1.radius = 1;
 
 	t_obj s2;
-	s2.dot.x = 2;
-	s2.dot.y = 3;
-	s2.dot.z = 15;
-	s2.radius = 1;
+	s2.dot.x = 0;
+	s2.dot.y = 0;
+	s2.dot.z = 30;
+	s2.radius = 10;
 
 	i = 0;
 
@@ -95,26 +97,37 @@ void	rtv1(t_rt *rt)
 		j = 0;
 		while (j < W_W)
 		{
-			r = 0;
-			if (ray(j, i, &s, rt))
+			mint.res = 1000000;
+			int col;
+			k = 0;
+			while (k < 3)
 			{
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x0000ff);
-				r = 1;
+				if (k == 0)
+				{
+					res0 = ray(j, i, &s, rt);
+					col = 0x0000ff;
+				}
+				if (k == 1)
+				{
+					res0 = ray(j, i, &s1, rt);
+					col = 0xff0000;
+				}
+				if (k == 2)
+				{
+					res0 = ray(j, i, &s2, rt);
+					col = 0x00ff00;	
+				}
+				if (res0 > 1 && res0 < mint.res)
+				{
+					mint.res = res0;
+					mint.color = col;
+				}
+				k++;
 			}
-			if (ray(j, i, &s1, rt))
-			{
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xff0000);
-				r = 1;
-			}
-			if (ray(j, i, &s2, rt))
-			{
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x00ff00);
-				r = 1;
-			}
-			else if (r == 0)
-			{
+			if (mint.res > 1 && mint.res < 1000000)
+				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, mint.color);
+			else
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xffffff);
-			}
 			j++;
 		}
 		i++;
