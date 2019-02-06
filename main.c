@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/06 20:27:19 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/06 21:33:20 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,39 @@ int ray (int j, int i, t_obj *obj, t_rt *rt)
 	return (res);
 }
 
+int		get_light(t_obj obj, int i, int j, t_rt rt)
+{
+	int color;
+
+	t_vec3 c;
+	c.x = (j * 1.0 - 300.0) / 600.0;
+	c.y = (i * 1.0 - 300.0) / 600.0;
+	c.z = 1;
+
+	t_vec3 d; //направление вектора луча
+	d = vec_minus(c, rt.cam);
+
+	t_vec3 p; //точка
+	p = vec_plus(rt.cam, vec_mul(d, rt.res));
+
+	t_vec3 n; //нормаль
+	n = vec_div(vec_minus(p, obj.dot), vec_mod_div(p, obj.dot));
+
+	t_vec3 l; //направляющий вектор луча света
+	l = vec_minus(rt.light.dot, p);
+
+	double sc; // cкаляр
+	sc = vec_sc(n, l);
+
+	double	ia; // i / a
+	if (sc > 0)
+	{
+		ia = sc / (vec_modul(l) * vec_modul(n));
+		rt.color = (double)rt.color * ia;
+	}
+	return (rt.color);
+}
+
 void	rtv1(t_rt *rt)
 {
 	int i;
@@ -69,26 +102,32 @@ void	rtv1(t_rt *rt)
 	int res0;
 	int k;
 
-	t_min_t mint;
-
 	t_obj s;
 	s.dot.x = 0;
 	s.dot.y = 0;
 	s.dot.z = 10;
 	s.radius = 1;
+	s.color = 0x0000ff;
 	//s.oc = vec_plus(s.dot, vec_mul(rt->cam, -1));
 
-	t_obj s1;
+	/* t_obj s1;
 	s1.dot.x = 1;
 	s1.dot.y = 1;
 	s1.dot.z = 20;
 	s1.radius = 1;
+	s1.color = 0xff0000;
 
 	t_obj s2;
 	s2.dot.x = 0;
 	s2.dot.y = 0;
 	s2.dot.z = 30;
 	s2.radius = 10;
+	s2.color = 0x00ff00; */
+
+	rt->light.dot.x = -0.5;
+	rt->light.dot.y = 0.5;
+	rt->light.dot.z = 10;
+	rt->light.inten = 0.2;
 
 	i = 0;
 	while (i < W_H)
@@ -96,35 +135,38 @@ void	rtv1(t_rt *rt)
 		j = 0;
 		while (j < W_W)
 		{
-			mint.res = 1000000;
+			rt->res = 1000000;
 			int col;
 			k = 0;
-			while (k < 3)
+			while (k < 1)
 			{
 				if (k == 0)
 				{
 					res0 = ray(j, i, &s, rt);
-					col = 0x0000ff;
+					col = s.color;
 				}
-				if (k == 1)
+				// if (k == 1)
+				// {
+				// 	res0 = ray(j, i, &s1, rt);
+				// 	col = s1.color;
+				// }
+				// if (k == 2)
+				// {
+				// 	res0 = ray(j, i, &s2, rt);
+				// 	col = s2.color;	
+				// }
+				if (res0 > 1 && res0 < rt->res)
 				{
-					res0 = ray(j, i, &s1, rt);
-					col = 0xff0000;
-				}
-				if (k == 2)
-				{
-					res0 = ray(j, i, &s2, rt);
-					col = 0x00ff00;	
-				}
-				if (res0 > 1 && res0 < mint.res)
-				{
-					mint.res = res0;
-					mint.color = col;
+					rt->res = res0;
+					rt->color = col;
 				}
 				k++;
 			}
-			if (mint.res > 1 && mint.res < 1000000)
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, mint.color);
+			if (rt->res > 1 && rt->res < 1000000)
+			{
+				rt->color = get_light(s, i, j, *rt);
+				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
+			}
 			else
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xffffff);
 			j++;
