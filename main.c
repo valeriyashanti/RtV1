@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 16:32:28 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 16:59:11 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
-	double color;
+	int color_r;
+	int color_g;
+	int color_b;
 
 	t_vec3 c;
 	c.x = (j * 1.0 - 300.0) / 600.0;
@@ -97,7 +99,13 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	if (sc > 0)
 	{
 		ia = sc / (vec_modul(l) * vec_modul(n)); 
-		rt.color = rt.color * ia;
+
+		color_b = ((int)rt.color & 255) * ia;
+		color_g = ((int)((((int)rt.color & 65280) >> 8) * ia) << 8);
+		color_r = ((int)((((int)rt.color & 16711680) >> 16) * ia) << 16);
+		//((int)rt.color & 16711680) * ia;
+
+		rt.color = color_b | color_g | color_r;
 	}
 	else 
 	{
@@ -118,16 +126,16 @@ void	rtv1(t_rt *rt)
 	int k;
 
 	t_obj s;
-	s.dot.x = 0.0;
-	s.dot.y = 0.0;
+	s.dot.x = -2.0;
+	s.dot.y = -2.0;
 	s.dot.z = 10.0;
 	s.radius = 1.0;
-	s.color = 0x0000ff;
+	s.color = 0x00ff00;
 	//s.oc = vec_plus(s.dot, vec_mul(rt->cam, -1));
 
 	t_obj s1;
-	s1.dot.x = -2.0;
-	s1.dot.y = -2.0;
+	s1.dot.x = -0.0;
+	s1.dot.y = -0.0;
 	s1.dot.z = 10.0;
 	s1.radius = 1.0;
 	s1.color = 0xff0000;
@@ -137,7 +145,7 @@ void	rtv1(t_rt *rt)
 	s2.dot.y = 3.0;
 	s2.dot.z = 10.0;
 	s2.radius = 1.0;
-	s2.color = 0x00ff00;
+	s2.color = 0x0000ff;
 
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
@@ -159,15 +167,15 @@ void	rtv1(t_rt *rt)
 			{
 				if (k == 0)
 				{
-					res0 = ray(j, i, &s, rt);
-					col = s.color;
-					o = s;
+					res0 = ray(j, i, &s1, rt);
+					col = s1.color;
+					o = s1;
 				}
 				 if (k == 1)
 				 {
-				 	res0 = ray(j, i, &s1, rt);
-				 	col = s1.color;
-					o = s1;
+				 	res0 = ray(j, i, &s, rt);
+				 	col = s.color;
+					o = s;
 				 }
 				 if (k == 2)
 				 {
@@ -230,7 +238,6 @@ int		deal_key(int key, t_rt *rt)
 		rt->move.y = 0.0;
 		rt->move.z = 0.0;
 		rt->cam = vec_plus(rt->cam, rt->move);
-		//printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
 	}
 	if (key == 69)
 	{
