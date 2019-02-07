@@ -6,13 +6,13 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/06 21:33:20 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 15:48:54 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int ray (int j, int i, t_obj *obj, t_rt *rt)
+double ray (int j, int i, t_obj *obj, t_rt *rt)
 {
 	t_vec3 l;
 	l.x = (j * 1.0 - 300.0) / 600.0;
@@ -38,18 +38,17 @@ int ray (int j, int i, t_obj *obj, t_rt *rt)
 	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);
 
 	double desc = k2 * k2 - 4 * k1 * k3;
-	if(desc < 0)
-		return (0);
-
+	if(desc < 0.0)
+		return (-1.0);
 	t1 = (-k2 + sqrt(desc)) / (2 * k1);
 	t2 = (k2 + sqrt(desc)) / (2 * k1);
 
-	double res = -1;
-	if (t1 >= 1 && t1 <= INFINITY)
+	double res = -1.0;
+	if (t1 >= 1.0 && t1 <= INFINITY)
 		res = t1;
-	if (res >= 0)
+	if (res >= 0.0)
 	{
-		if (t2 >=1 && t2<= INFINITY && t2 < res)
+		if (t2 >= 1.0 && t2<= INFINITY && t2 < res)
 			res = t2;
 	}
 	else
@@ -71,6 +70,9 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 	t_vec3 d; //направление вектора луча
 	d = vec_minus(c, rt.cam);
+	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
+
+	d = vec_div(d, vec_modul(d));
 
 	t_vec3 p; //точка
 	p = vec_plus(rt.cam, vec_mul(d, rt.res));
@@ -78,16 +80,22 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	t_vec3 n; //нормаль
 	n = vec_div(vec_minus(p, obj.dot), vec_mod_div(p, obj.dot));
 
-	t_vec3 l; //направляющий вектор луча света
-	l = vec_minus(rt.light.dot, p);
+	t_vec3 l; //вектор луча света
+	l = vec_minus(p, rt.light.dot);
 
 	double sc; // cкаляр
 	sc = vec_sc(n, l);
-
 	double	ia; // i / a
+
 	if (sc > 0)
 	{
-		ia = sc / (vec_modul(l) * vec_modul(n));
+		ia = sc / (vec_modul(l) * vec_modul(n)); 
+		rt.color = (double)rt.color * ia;
+	}
+	else 
+	{
+		sc = 0;
+		ia = 0;
 		rt.color = (double)rt.color * ia;
 	}
 	return (rt.color);
@@ -98,15 +106,15 @@ void	rtv1(t_rt *rt)
 	int i;
 	int j;
 	int r;
-	int res;
-	int res0;
+	double res;
+	double res0;
 	int k;
 
 	t_obj s;
-	s.dot.x = 0;
-	s.dot.y = 0;
-	s.dot.z = 10;
-	s.radius = 1;
+	s.dot.x = 0.0;
+	s.dot.y = 0.0;
+	s.dot.z = 10.0;
+	s.radius = 1.0;
 	s.color = 0x0000ff;
 	//s.oc = vec_plus(s.dot, vec_mul(rt->cam, -1));
 
@@ -124,10 +132,10 @@ void	rtv1(t_rt *rt)
 	s2.radius = 10;
 	s2.color = 0x00ff00; */
 
-	rt->light.dot.x = -0.5;
-	rt->light.dot.y = 0.5;
-	rt->light.dot.z = 10;
-	rt->light.inten = 0.2;
+	rt->light.dot.x = -0.4;
+	rt->light.dot.y = -0.4;
+	rt->light.dot.z = 5.0;
+	rt->light.inten = 0.8;
 
 	i = 0;
 	while (i < W_H)
@@ -155,20 +163,20 @@ void	rtv1(t_rt *rt)
 				// 	res0 = ray(j, i, &s2, rt);
 				// 	col = s2.color;	
 				// }
-				if (res0 > 1 && res0 < rt->res)
+				if (res0 > 1.0 && res0 < rt->res)
 				{
 					rt->res = res0;
 					rt->color = col;
 				}
 				k++;
 			}
-			if (rt->res > 1 && rt->res < 1000000)
+			if (rt->res > 1.0 && rt->res < 1000000.0)
 			{
 				rt->color = get_light(s, i, j, *rt);
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
 			}
 			else
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xffffff);
+				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x000000);
 			j++;
 		}
 		i++;
