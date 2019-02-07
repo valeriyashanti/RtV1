@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 16:59:11 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 18:24:56 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,22 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 	return (res);
 }
 
+
+double		compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s)
+{
+	t_vec3 r;
+	t_vec3 l_n;
+	t_vec3 l_p;
+
+	l_n = vec_mul(n, vec_sc(n, l));
+	l_p = vec_minus(l, l_n);
+	r = vec_minus(l_n, l_p);
+
+	ia = (pow((vec_sc(r, v) / (vec_modul(r) * vec_modul(v))), s) *  ia);
+
+	return (ia);
+}
+
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
 	int color_r;
@@ -77,20 +93,14 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	t_vec3 d; //направление вектора луча
 	d = vec_minus(c, rt.cam);
 
-	// d = vec_div(d, vec_modul(d));
-	// printf("%lf %lf %lf\n", rt.cam.x, rt.cam.y, rt.cam.z);
-
 	t_vec3 p; //точка
 	p = vec_plus(null, vec_mul(d, rt.res));
-	// printf("P - %lf %lf %lf\n", p.x, p.y, p.z);
 
 	t_vec3 n; //нормаль
 	n = vec_div(vec_minus(p, obj.dot), vec_mod_div(p, obj.dot));
-	// printf("N - %lf %lf %lf\n", n.x, n.y, n.z);
 
 	t_vec3 l; //вектор луча света
 	l = vec_minus(p, rt.light.dot);
-	// printf("L - %lf %lf %lf\n", l.x, l.y, l.z);
 
 	double sc; // cкаляр
 	sc = vec_sc(n, l);
@@ -98,13 +108,13 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 	if (sc > 0)
 	{
-		ia = sc / (vec_modul(l) * vec_modul(n)); 
-
+		ia = sc / (vec_modul(l) * vec_modul(n));
+		t_vec3 v;
+		v = vec_minus(p, rt.cam);
+		// ia = compute_specular(n, l, ia, v, obj.specular);
 		color_b = ((int)rt.color & 255) * ia;
 		color_g = ((int)((((int)rt.color & 65280) >> 8) * ia) << 8);
 		color_r = ((int)((((int)rt.color & 16711680) >> 16) * ia) << 16);
-		//((int)rt.color & 16711680) * ia;
-
 		rt.color = color_b | color_g | color_r;
 	}
 	else 
@@ -115,6 +125,7 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	}
 	return (rt.color);
 }
+
 
 void	rtv1(t_rt *rt)
 {
@@ -131,14 +142,15 @@ void	rtv1(t_rt *rt)
 	s.dot.z = 10.0;
 	s.radius = 1.0;
 	s.color = 0x00ff00;
-	//s.oc = vec_plus(s.dot, vec_mul(rt->cam, -1));
+	s.specular = 5.0;
 
 	t_obj s1;
-	s1.dot.x = -0.0;
-	s1.dot.y = -0.0;
-	s1.dot.z = 10.0;
+	s1.dot.x = 0.0;
+	s1.dot.y = 3.0;
+	s1.dot.z = 15.0;
 	s1.radius = 1.0;
 	s1.color = 0xff0000;
+	s1.specular = 1.0;
 
 	t_obj s2;
 	s2.dot.x = 3.0;
@@ -146,6 +158,7 @@ void	rtv1(t_rt *rt)
 	s2.dot.z = 10.0;
 	s2.radius = 1.0;
 	s2.color = 0x0000ff;
+	s2.specular = 0.0;
 
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
