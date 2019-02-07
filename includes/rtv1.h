@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 16:31:11 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 21:50:25 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,20 @@
 # define M_W 300
 # define M_H 300
 
+typedef struct	s_rgb
+{	
+	char		b;
+	char		g;
+	char		r;
+	char		a;
+}				t_rgb;
+
+typedef union	u_color
+{
+	t_rgb		rgb;
+	int			value;
+}				t_color;
+
 typedef struct  s_vec3
 {
 	double      x;
@@ -45,8 +59,9 @@ typedef struct  s_obj
 	t_vec3      dot;
 	t_vec3		oc;
 	double		radius;
-	double		color;
+	t_color		col;
 	double		inten;
+	double		specular;
 }				t_obj;
 
 typedef struct  s_rt
@@ -58,7 +73,7 @@ typedef struct  s_rt
 	t_vec3		move;
 	t_obj		light;
 	double		res;
-	double		color;
+	int			color;
 	t_obj		obj;
 }               t_rt;
 

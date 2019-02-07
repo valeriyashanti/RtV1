@@ -6,11 +6,30 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 18:24:56 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 22:42:10 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+
+double char_to_double(char c)
+{
+	double n = 0.0;
+	int tmp;
+	int i = 0;
+	while (i < 8)
+	{
+		tmp = pow(2, i);
+		tmp = (c & (1 << i)) * tmp;
+		n+= (double)tmp;
+		i++;
+	}
+	return (n);
+}
+
+
+
 
 double ray (int j, int i, t_obj *obj, t_rt *rt)
 {
@@ -19,7 +38,8 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 	l.y = (i * 1.0 - 300.0) / 600.0;
 	l.z = 1;
 
-	obj->oc = vec_plus(obj->dot, vec_mul(rt->cam, -1));
+	//obj->oc = vec_plus(obj->dot, vec_mul(rt->cam, -1));
+	obj->oc = vec_minus(rt->cam, obj->dot);
 	double k1;
 	double k2;
 	double k3;
@@ -31,8 +51,8 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 	//oc = vec_plus(obj->dot, vec_mul(rt->cam, -1));
 
 	t_vec3 d;
-	d = vec_plus(l, vec_mul(rt->cam, -1));
-	
+	d = vec_minus(l, rt->cam); 
+
 	k1 = vec_sc(d, d);
 	k2 = 2 * vec_sc(obj->oc, d);
 	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);
@@ -41,21 +61,25 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 	if(desc < 0.0)
 		return (-1.0);
 	t1 = (-k2 + sqrt(desc)) / (2 * k1);
-	t2 = (k2 + sqrt(desc)) / (2 * k1);
+	t2 = (-k2 - sqrt(desc)) / (2 * k1);
 
-	double res = -1.0;
-	if (t1 >= 1.0 && t1 <= INFINITY)
+	/* t1 = fabs(t1);
+	t2 = fabs(t2); */
+
+	double res = INFINITY;
+	if (t1 >= 1.0 && t1 < INFINITY)
 		res = t1;
 	if (res >= 0.0)
 	{
-		if (t2 >= 1.0 && t2<= INFINITY && t2 < res)
+		if (t2 >= 1.0 && t2 < INFINITY && t2 < res)
 			res = t2;
 	}
 	else
 	{
-		if (t2 >=1 && t2<= INFINITY)
+		if (t2 >=1 && t2 < INFINITY)
 			res = t2;
 	}
+// printf("t1: %lf, t2: %lf , res: %lf \n", t1, t2, res);
 	return (res);
 }
 
@@ -77,9 +101,9 @@ double		compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s)
 
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
-	int color_r;
+	/* int color_r;
 	int color_g;
-	int color_b;
+	int color_b; */
 
 	t_vec3 c;
 	c.x = (j * 1.0 - 300.0) / 600.0;
@@ -90,8 +114,9 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	null.x = 0.0;
 	null.y = 0.0;
 	null.z = 0.0;
+
 	t_vec3 d; //направление вектора луча
-	d = vec_minus(c, rt.cam);
+	d = vec_minus(rt.cam, c);
 
 	t_vec3 p; //точка
 	p = vec_plus(null, vec_mul(d, rt.res));
@@ -105,24 +130,46 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	double sc; // cкаляр
 	sc = vec_sc(n, l);
 	double	ia; // i / a
-
+	
 	if (sc > 0)
 	{
 		ia = sc / (vec_modul(l) * vec_modul(n));
 		t_vec3 v;
 		v = vec_minus(p, rt.cam);
-		// ia = compute_specular(n, l, ia, v, obj.specular);
-		color_b = ((int)rt.color & 255) * ia;
-		color_g = ((int)((((int)rt.color & 65280) >> 8) * ia) << 8);
-		color_r = ((int)((((int)rt.color & 16711680) >> 16) * ia) << 16);
-		rt.color = color_b | color_g | color_r;
+		// s1.col.rgb.r = 0xff;
+
+		//ia = compute_specular(n, l, ia, v, obj.specular);
+
+		//obj.col.value = rt.color;
+		
+		
+		//printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
+
+		// printf("%lf\n", ia);
+
+		
+		// printf("%f %f %f %f\n", obj.col.rgb.a, obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r);
+		double n;
+		char a = 0xff;
+		n = char_to_double(a);
+		printf("%lf\n", n);
+/* 
+		obj.col.rgb.b = (char)((int)((double)(int)(obj.col.rgb.b) * ia));
+		obj.col.rgb.g = (char)((int)((double)(int)(obj.col.rgb.g) * ia));
+		obj.col.rgb.r = (char)((int)((double)(int)(obj.col.rgb.r) * ia)); */
+
+		// printf("%fl\n", (((double)(int)(obj.col.rgb.b) * ia)));
+		// printf("%p\n", obj.col.rgb.g);
+		// printf("%p\n", obj.col.rgb.r);
+		//printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
+		/* color_b = (rt.color & 255) * ia;
+		color_g = ((int)(((rt.color & 65280) >> 8) * ia) << 8);
+		color_r = ((int)(((rt.color & 16711680) >> 16) * ia) << 16); */
+		/* rt.color = (color_b | color_g | color_r); */
+		rt.color = obj.col.value;
 	}
-	else 
-	{
-		sc = 0;
-		ia = 0;
-		rt.color = rt.color * ia;
-	}
+	else
+		rt.color = 0;
 	return (rt.color);
 }
 
@@ -137,32 +184,35 @@ void	rtv1(t_rt *rt)
 	int k;
 
 	t_obj s;
-	s.dot.x = -2.0;
-	s.dot.y = -2.0;
-	s.dot.z = 10.0;
+	s.dot.x = -1.0;
+	s.dot.y = -1.0;
+	s.dot.z = 15.0;
 	s.radius = 1.0;
-	s.color = 0x00ff00;
+	s.col.value = 0x00ff00;
 	s.specular = 5.0;
 
 	t_obj s1;
 	s1.dot.x = 0.0;
-	s1.dot.y = 3.0;
+	s1.dot.y = 0.0;
 	s1.dot.z = 15.0;
 	s1.radius = 1.0;
-	s1.color = 0xff0000;
+	s1.col.rgb.a = 0x00;
+	s1.col.rgb.r = 0xff;
+	s1.col.rgb.g = 0x00;
+	s1.col.rgb.b = 0x00;
 	s1.specular = 1.0;
 
 	t_obj s2;
-	s2.dot.x = 3.0;
-	s2.dot.y = 3.0;
-	s2.dot.z = 10.0;
+	s2.dot.x = 1.0;
+	s2.dot.y = 1.0;
+	s2.dot.z = 15.0;
 	s2.radius = 1.0;
-	s2.color = 0x0000ff;
+	s2.col.value = 0x0000ff;
 	s2.specular = 0.0;
 
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
-	rt->light.dot.z = 5.0;
+	rt->light.dot.z = 1.0;
 	rt->light.inten = 0.5;
 
 	t_obj o;
@@ -173,27 +223,27 @@ void	rtv1(t_rt *rt)
 		j = 0;
 		while (j < W_W)
 		{
-			rt->res = 1000000;
-			double col;
+			rt->res = INFINITY;
+			int col;
 			k = 0;
 			while (k < 3)
 			{
 				if (k == 0)
 				{
-					res0 = ray(j, i, &s1, rt);
-					col = s1.color;
-					o = s1;
+					res0 = ray(j, i, &s, rt);
+					col = s.col.value;
+					o = s;
 				}
 				 if (k == 1)
 				 {
-				 	res0 = ray(j, i, &s, rt);
-				 	col = s.color;
-					o = s;
+				 	res0 = ray(j, i, &s1, rt);
+				 	col = s1.col.value;
+					o = s1;
 				 }
-				 if (k == 2)
+				if (k == 2)
 				 {
 					res0 = ray(j, i, &s2, rt);
-					col = s2.color;
+					col = s2.col.value;
 					o = s2;
 				}
 				if (res0 > 1.0 && res0 < rt->res)
@@ -204,13 +254,16 @@ void	rtv1(t_rt *rt)
 				}
 				k++;
 			}
-			if (rt->res > 1.0 && rt->res < 1000000.0)
+			// if (rt->res != INFINITY)
+			// 	printf("res: %lf \n", rt->res);
+			if (rt->res > 1.0 && rt->res < INFINITY)
 			{
 				rt->color = get_light(rt->obj, i, j, *rt);
+				//printf("rt->color : %lf\n", rt->color);
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
 			}
-			else
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x000000);
+			/* else
+				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x000000); */
 			j++;
 		}
 		i++;
