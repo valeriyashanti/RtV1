@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 15:48:54 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 16:09:25 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,25 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
-	int color;
+	double color;
 
 	t_vec3 c;
 	c.x = (j * 1.0 - 300.0) / 600.0;
 	c.y = (i * 1.0 - 300.0) / 600.0;
-	c.z = 1;
+	c.z = 1.0;
 
 	t_vec3 d; //направление вектора луча
 	d = vec_minus(c, rt.cam);
-	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
 
-	d = vec_div(d, vec_modul(d));
+	// d = vec_div(d, vec_modul(d));
+	// printf("%lf %lf %lf\n", rt.cam.x, rt.cam.y, rt.cam.z);
 
 	t_vec3 p; //точка
-	p = vec_plus(rt.cam, vec_mul(d, rt.res));
+	t_vec3 null;
+	null.x = 0.0;
+	null.y = 0.0;
+	null.z = 0.0;
+	p = vec_plus(null, vec_mul(d, rt.res));
 
 	t_vec3 n; //нормаль
 	n = vec_div(vec_minus(p, obj.dot), vec_mod_div(p, obj.dot));
@@ -90,13 +94,13 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	if (sc > 0)
 	{
 		ia = sc / (vec_modul(l) * vec_modul(n)); 
-		rt.color = (double)rt.color * ia;
+		rt.color = rt.color * ia;
 	}
 	else 
 	{
 		sc = 0;
 		ia = 0;
-		rt.color = (double)rt.color * ia;
+		rt.color = rt.color * ia;
 	}
 	return (rt.color);
 }
@@ -132,10 +136,10 @@ void	rtv1(t_rt *rt)
 	s2.radius = 10;
 	s2.color = 0x00ff00; */
 
-	rt->light.dot.x = -0.4;
-	rt->light.dot.y = -0.4;
+	rt->light.dot.x = 0.0;
+	rt->light.dot.y = 0.0;
 	rt->light.dot.z = 5.0;
-	rt->light.inten = 0.8;
+	rt->light.inten = 0.2;
 
 	i = 0;
 	while (i < W_H)
@@ -144,7 +148,7 @@ void	rtv1(t_rt *rt)
 		while (j < W_W)
 		{
 			rt->res = 1000000;
-			int col;
+			double col;
 			k = 0;
 			while (k < 1)
 			{
@@ -192,44 +196,44 @@ int		deal_key(int key, t_rt *rt)
 {
 	if (key == 126)
 	{
-		rt->move.x = 0;
+		rt->move.x = 0.0;
 		rt->move.y = 0.1;
-		rt->move.z = 0;
+		rt->move.z = 0.0;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
 	if (key == 125)
 	{
-		rt->move.x = 0;
+		rt->move.x = 0.0;
 		rt->move.y = -0.1;
-		rt->move.z = 0;
+		rt->move.z = 0.0;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
 	if (key == 123)
 	{
 		rt->move.x = 0.1;
-		rt->move.y = 0;
-		rt->move.z = 0;
+		rt->move.y = 0.0;
+		rt->move.z = 0.0;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
 	if (key == 124)
 	{
 		rt->move.x = -0.1;
-		rt->move.y = 0;
-		rt->move.z = 0;
+		rt->move.y = 0.0;
+		rt->move.z = 0.0;
 		rt->cam = vec_plus(rt->cam, rt->move);
 		//printf("%lf %lf %lf \n", rt->cam.x, rt->cam.y, rt->cam.z);
 	}
 	if (key == 69)
 	{
-		rt->move.x = 0;
-		rt->move.y = 0;
+		rt->move.x = 0.0;
+		rt->move.y = 0.0;
 		rt->move.z = -0.1;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
 	if (key == 78)
 	{
-		rt->move.x = 0;
-		rt->move.y = 0;
+		rt->move.x = 0.0;
+		rt->move.y = 0.0;
 		rt->move.z = 0.1;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
