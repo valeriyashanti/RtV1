@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 15:01:15 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/07 16:31:11 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct  s_obj
 	t_vec3      dot;
 	t_vec3		oc;
 	double		radius;
-	int			color;
+	double		color;
 	double		inten;
 }				t_obj;
 
@@ -58,7 +58,8 @@ typedef struct  s_rt
 	t_vec3		move;
 	t_obj		light;
 	double		res;
-	int			color;
+	double		color;
+	t_obj		obj;
 }               t_rt;
 
 double  vec_sc(t_vec3 a, t_vec3 b);
