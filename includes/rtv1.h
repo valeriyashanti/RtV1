@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 21:50:25 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/08 13:46:58 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct  s_obj
 	t_color		col;
 	double		inten;
 	double		specular;
+	double		reflective;
 }				t_obj;
 
 typedef struct  s_rt
@@ -77,12 +78,13 @@ typedef struct  s_rt
 	t_obj		obj;
 }               t_rt;
 
-double  vec_sc(t_vec3 a, t_vec3 b);
-t_vec3 vec_mul(t_vec3 a, double n);
-t_vec3 vec_plus(t_vec3 a, t_vec3 b);
-t_vec3  vec_minus(t_vec3 a, t_vec3 b);
-t_vec3 vec_div(t_vec3 a, double n);
-double vec_mod_div(t_vec3 a, t_vec3 b);
-double vec_modul(t_vec3 a);
+double			vec_sc(t_vec3 a, t_vec3 b);
+t_vec3			vec_mul(t_vec3 a, double n);
+t_vec3			vec_plus(t_vec3 a, t_vec3 b);
+t_vec3 			vec_minus(t_vec3 a, t_vec3 b);
+t_vec3			vec_div(t_vec3 a, double n);
+double			vec_mod_div(t_vec3 a, t_vec3 b);
+double			vec_modul(t_vec3 a);
+double   		ray_cone(int j, int  i, t_obj *obj, t_rt *rt);
 
 #endif

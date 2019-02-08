@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/07 22:42:10 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/08 13:49:53 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ double char_to_double(char c)
 	return (n);
 }
 
-
-
-
-double ray (int j, int i, t_obj *obj, t_rt *rt)
+double 		ray_sphere(int j, int i, t_obj *obj, t_rt *rt)
 {
 	t_vec3 l;
 	l.x = (j * 1.0 - 300.0) / 600.0;
@@ -52,6 +49,7 @@ double ray (int j, int i, t_obj *obj, t_rt *rt)
 
 	t_vec3 d;
 	d = vec_minus(l, rt->cam); 
+	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
 
 	k1 = vec_sc(d, d);
 	k2 = 2 * vec_sc(obj->oc, d);
@@ -94,8 +92,10 @@ double		compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s)
 	l_p = vec_minus(l, l_n);
 	r = vec_minus(l_n, l_p);
 
-	ia = (pow((vec_sc(r, v) / (vec_modul(r) * vec_modul(v))), s) *  ia);
+	if (vec_sc(r,v) > 0) 
+		ia = (pow((vec_sc(r, v) / (vec_modul(r) * vec_modul(v))), s) *  ia);
 
+	printf("ia - %lf\n", ia);
 	return (ia);
 }
 
@@ -116,60 +116,107 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	null.z = 0.0;
 
 	t_vec3 d; //направление вектора луча
-	d = vec_minus(rt.cam, c);
+	d = vec_minus(c, rt.cam); // O - C
+
+	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
 
 	t_vec3 p; //точка
-	p = vec_plus(null, vec_mul(d, rt.res));
+	p = vec_plus(rt.cam, vec_mul(d, rt.res));
+	//printf("%lf %lf %lf\n", p.x, p.y, p.z);
 
 	t_vec3 n; //нормаль
-	n = vec_div(vec_minus(p, obj.dot), vec_mod_div(p, obj.dot));
+	n = vec_minus(obj.dot, p);
+	t_vec3 n_n;
+	n_n = vec_div(n, vec_modul(n));
+	//printf("%lf %lf %lf\n", n.x, n.y, n.z);
 
 	t_vec3 l; //вектор луча света
 	l = vec_minus(p, rt.light.dot);
 
+	t_vec3 l_n;
+	l_n = vec_div(l, vec_modul(l));
+
+	//printf("color - %d  %lf %lf %lf\n", obj.col.value, l.x, l.y, l.z);
+
 	double sc; // cкаляр
-	sc = vec_sc(n, l);
-	double	ia; // i / a
+	sc = vec_sc(n, l_n);
+	//printf("sc -- %lf\n", sc);
+	double	ia ; // i / a
 	
 	if (sc > 0)
 	{
-		ia = sc / (vec_modul(l) * vec_modul(n));
+		ia = (sc / (vec_modul(l) * vec_modul(n)));
+		// printf("z - %lf++++  %lf\n", obj.dot.z, ia);
 		t_vec3 v;
 		v = vec_minus(p, rt.cam);
 		// s1.col.rgb.r = 0xff;
-
+		// printf("ia -- %lf\n", ia);
 		//ia = compute_specular(n, l, ia, v, obj.specular);
+ 
+		/* unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
+		double c_b_d;
+		c_b_d = (((double)(c_b) * (ia)));
+		c_b = (unsigned int)c_b_d;
+		obj.col.rgb.b = (char)c_b;
 
-		//obj.col.value = rt.color;
-		
-		
-		//printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
+		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
+		double c_r_d;
+		c_r_d = (((double)(c_r) * ia));
+		c_r = (unsigned int)c_r_d;
+		obj.col.rgb.r = (char)c_r;
 
-		// printf("%lf\n", ia);
 
-		
-		// printf("%f %f %f %f\n", obj.col.rgb.a, obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r);
-		double n;
-		char a = 0xff;
-		n = char_to_double(a);
-		printf("%lf\n", n);
-/* 
-		obj.col.rgb.b = (char)((int)((double)(int)(obj.col.rgb.b) * ia));
-		obj.col.rgb.g = (char)((int)((double)(int)(obj.col.rgb.g) * ia));
-		obj.col.rgb.r = (char)((int)((double)(int)(obj.col.rgb.r) * ia)); */
+		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
+		double c_g_d;
+		c_g_d = (((double)(c_g) * ia));
+		c_g = (unsigned int)c_g_d;
+		obj.col.rgb.g = (char)c_g;
+
+		rt.color = obj.col.value; */
+
+		// obj.col.rgb.g = (((int)(obj.col.rgb.g) * ia));
+
+		// obj.col.rgb.r = (((int)(obj.col.rgb.r) * c));
+
+		// obj.col.value = obj.col.value / 10000;
 
 		// printf("%fl\n", (((double)(int)(obj.col.rgb.b) * ia)));
 		// printf("%p\n", obj.col.rgb.g);
 		// printf("%p\n", obj.col.rgb.r);
-		//printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
-		/* color_b = (rt.color & 255) * ia;
-		color_g = ((int)(((rt.color & 65280) >> 8) * ia) << 8);
-		color_r = ((int)(((rt.color & 16711680) >> 16) * ia) << 16); */
-		/* rt.color = (color_b | color_g | color_r); */
-		rt.color = obj.col.value;
+		// printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
+		// color_b = (rt.color & 255) * ia;
+		// color_g = ((int)(((rt.color & 65280) >> 8) * ia) << 8);
+		// color_r = ((int)(((rt.color & 16711680) >> 16) * ia) << 16);
+		// rt.color = (color_b | color_g | color_r);
+		
 	}
 	else
-		rt.color = 0;
+	{
+		ia = 0;
+	}	//rt.color = 0;
+
+		ia += 0.1; 
+	
+		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
+		double c_b_d;
+		c_b_d = (((double)(c_b) * (ia)));
+		c_b = (unsigned int)c_b_d;
+		obj.col.rgb.b = (char)c_b;
+
+		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
+		double c_r_d;
+		c_r_d = (((double)(c_r) * ia));
+		c_r = (unsigned int)c_r_d;
+		obj.col.rgb.r = (char)c_r;
+
+
+		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
+		double c_g_d;
+		c_g_d = (((double)(c_g) * ia));
+		c_g = (unsigned int)c_g_d;
+		obj.col.rgb.g = (char)c_g;
+
+		rt.color = obj.col.value;
 	return (rt.color);
 }
 
@@ -184,17 +231,17 @@ void	rtv1(t_rt *rt)
 	int k;
 
 	t_obj s;
-	s.dot.x = -1.0;
-	s.dot.y = -1.0;
-	s.dot.z = 15.0;
+	s.dot.x = -3.0;
+	s.dot.y = -3.0;
+	s.dot.z = 13.0;
 	s.radius = 1.0;
 	s.col.value = 0x00ff00;
-	s.specular = 5.0;
+	s.specular = 1.0;
 
 	t_obj s1;
 	s1.dot.x = 0.0;
 	s1.dot.y = 0.0;
-	s1.dot.z = 15.0;
+	s1.dot.z = 10.0;
 	s1.radius = 1.0;
 	s1.col.rgb.a = 0x00;
 	s1.col.rgb.r = 0xff;
@@ -203,17 +250,27 @@ void	rtv1(t_rt *rt)
 	s1.specular = 1.0;
 
 	t_obj s2;
-	s2.dot.x = 1.0;
-	s2.dot.y = 1.0;
+	s2.dot.x = 0.0;
+	s2.dot.y = 40.0;
 	s2.dot.z = 15.0;
-	s2.radius = 1.0;
+	s2.radius = 40.0;
 	s2.col.value = 0x0000ff;
-	s2.specular = 0.0;
+	s2.specular = 0.1;
+	s2.reflective = 0.5;
 
-	rt->light.dot.x = 0.0;
-	rt->light.dot.y = 0.0;
-	rt->light.dot.z = 1.0;
-	rt->light.inten = 0.5;
+	t_obj cone;
+	cone.dot.x = 0.0;
+	cone.dot.y = 0.0;
+	cone.dot.z = 0.0;
+	cone.col.value = 0x0000ff;
+	cone.specular = 0.1;
+	cone.reflective = 0.5;
+
+
+	rt->light.dot.x = -1.5;
+	rt->light.dot.y = -1.5;
+	rt->light.dot.z = 9.0;
+	rt->light.inten = 1;
 
 	t_obj o;
 
@@ -226,23 +283,26 @@ void	rtv1(t_rt *rt)
 			rt->res = INFINITY;
 			int col;
 			k = 0;
-			while (k < 3)
+			while (k < 1)
 			{
+				if (k == 1)
+				{
+					res0 = ray_cone(j, i, &cone, rt);
+					col = cone.col.value;
+					o = cone;
+					// res0 = ray(j, i, &s, rt);
+					// col = s.col.value;
+					// o = s;
+				}
 				if (k == 0)
 				{
-					res0 = ray(j, i, &s, rt);
-					col = s.col.value;
-					o = s;
-				}
-				 if (k == 1)
-				 {
-				 	res0 = ray(j, i, &s1, rt);
+				 	res0 = ray_sphere(j, i, &s1, rt);
 				 	col = s1.col.value;
 					o = s1;
-				 }
+				}
 				if (k == 2)
 				 {
-					res0 = ray(j, i, &s2, rt);
+					res0 = ray_sphere(j, i, &s2, rt);
 					col = s2.col.value;
 					o = s2;
 				}
@@ -263,7 +323,7 @@ void	rtv1(t_rt *rt)
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
 			}
 			/* else
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0x000000); */
+				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xffffff); */
 			j++;
 		}
 		i++;
