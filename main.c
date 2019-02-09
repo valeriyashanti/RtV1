@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 17:17:19 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 17:49:29 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ double 		ray_sphere(int j, int i, t_obj *obj, t_rt *rt)
 		if (t2 >=1 && t2 < INFINITY)
 			res = t2;
 	}
-// printf("t1: %lf, t2: %lf , res: %lf \n", t1, t2, res);
 	return (res);
 }
 
@@ -98,28 +97,24 @@ double		compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s)
 	if (vec_sc(r,v) > 0) 
 		ia = (pow((vec_sc(r, v) / (vec_modul(r) * vec_modul(v))), s) *  ia);
 
-	printf("ia - %lf\n", ia);
 	return (ia);
 }
 
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
-	/* int color_r;
-	int color_g;
-	int color_b; */
 	t_vec3 c;
 	c.x = (j * 1.0 - 300.0) / 600.0;
 	c.y = (i * 1.0 - 300.0) / 600.0;
 	c.z = 1.0;
 
-	t_vec3 null;
+/* 	t_vec3 null;
 	null.x = 0.0;
 	null.y = 0.0;
-	null.z = 0.0;
+	null.z = 0.0; */
 
 	t_vec3 d; //направление вектора луча
-	d = vec_minus(c, rt.cam); // O - C
-	// d = vec_div(d, vec_modul(d));
+	d = vec_minus(c, rt.cam);
+	d = vec_div(d, vec_modul(d));
 
 	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
 
@@ -129,6 +124,7 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 	t_vec3 n; //нормаль
 	n = vec_minus(obj.dot, p);
+
 	t_vec3 n_n;
 	n_n = vec_div(n, vec_modul(n));
 	//printf("%lf %lf %lf\n", n.x, n.y, n.z);
@@ -141,63 +137,17 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 
 	double sc; // cкаляр
-	sc = vec_sc(n, l);
-	//printf("sc -- %lf\n", sc);
+	sc = vec_sc(n_n, l_n);
 	double	ia ; // i / a
 	
 	if (sc > 0)
 	{
-		ia = (sc / (vec_modul(l) * vec_modul(n)));
+		ia = (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt.cam);
-		// s1.col.rgb.r = 0xff;
-		// printf("ia -- %lf\n", ia);
+
 		//ia = compute_specular(n, l, ia, v, obj.specular);
- 
-		/* unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
-		double c_b_d;
-		c_b_d = (((double)(c_b) * (ia)));
-		c_b = (unsigned int)c_b_d;
-		obj.col.rgb.b = (char)c_b;
 
-		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
-		double c_r_d;
-		c_r_d = (((double)(c_r) * ia));
-		c_r = (unsigned int)c_r_d;
-		obj.col.rgb.r = (char)c_r;
-
-
-		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
-		double c_g_d;
-		c_g_d = (((double)(c_g) * ia));
-		c_g = (unsigned int)c_g_d;
-		obj.col.rgb.g = (char)c_g;
-
-		rt.color = obj.col.value; */
-
-		// obj.col.rgb.g = (((int)(obj.col.rgb.g) * ia));
-
-		// obj.col.rgb.r = (((int)(obj.col.rgb.r) * c));
-
-		// obj.col.value = obj.col.value / 10000;
-
-		// printf("%fl\n", (((double)(int)(obj.col.rgb.b) * ia)));
-		// printf("%p\n", obj.col.rgb.g);
-		// printf("%p\n", obj.col.rgb.r);
-		// printf("%p %p %p\n",obj.col.rgb.b, obj.col.rgb.g, obj.col.rgb.r );
-		// color_b = (rt.color & 255) * ia;
-		// color_g = ((int)(((rt.color & 65280) >> 8) * ia) << 8);
-		// color_r = ((int)(((rt.color & 16711680) >> 16) * ia) << 16);
-		// rt.color = (color_b | color_g | color_r);
-		
-	}
-	else
-	{
-		ia = 0;
-	}	//rt.color = 0;
-
-		//ia += 0.2; 
-	
 		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
 		double c_b_d;
 		c_b_d = (((double)(c_b) * (ia)));
@@ -218,6 +168,16 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 		obj.col.rgb.g = (char)c_g;
 
 		rt.color = obj.col.value;
+	}
+	else
+	{
+		ia = 0;
+		rt.color = 0;
+	}	//rt.color = 0;
+
+		//ia += 0.2; 
+	
+
 	return (rt.color);
 }
 
@@ -302,7 +262,7 @@ void	rtv1(t_rt *rt)
 
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
-	rt->light.dot.z = 1.0;
+	rt->light.dot.z = 4.0;
 	rt->light.inten = 0.1;
 
 	t_obj o;
