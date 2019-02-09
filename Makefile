@@ -6,12 +6,12 @@
 #    By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 15:49:41 by eloren-l          #+#    #+#              #
-#    Updated: 2019/02/08 13:47:47 by gkessler         ###   ########.fr        #
+#    Updated: 2019/02/09 13:51:08 by gkessler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MAIN = main.c
-SRCS = main.c vec_sc.c cone.c
+SRCS = main.c vec_sc.c cone.c roll.c plane.c
 SRCS_L = $(addprefix libft/,$(SRCS_LNAME))
 SRCS_LNAME = ft_atoi.c ft_bzero.c ft_foreach.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		ft_isdigit.c ft_isprint.c ft_itoa.c ft_list_at.c ft_list_size.c ft_lstadd.c \

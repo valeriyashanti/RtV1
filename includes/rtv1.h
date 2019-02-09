@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/08 13:46:58 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 14:19:18 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ typedef struct  s_vec3
 	double      z;
 }               t_vec3;
 
-typedef struct  s_vec2
-{
-	double      x;
-	double      y;
-}               t_vec2;
-
 typedef struct  s_obj
 {
 	t_vec3      dot;
@@ -63,6 +57,9 @@ typedef struct  s_obj
 	double		inten;
 	double		specular;
 	double		reflective;
+	double		a;
+	double		b;
+	double		c;
 }				t_obj;
 
 typedef struct  s_rt
@@ -86,5 +83,10 @@ t_vec3			vec_div(t_vec3 a, double n);
 double			vec_mod_div(t_vec3 a, t_vec3 b);
 double			vec_modul(t_vec3 a);
 double   		ray_cone(int j, int  i, t_obj *obj, t_rt *rt);
+double      	ray_roll(int j, int  i, t_obj *obj, t_rt *rt);
+double			ray_plane_x(int j, int  i, t_obj *obj, t_rt *rt);
+double			ray_plane_y(int j, int  i, t_obj *obj, t_rt *rt);
+double			ray_plane_z(int j, int  i, t_obj *obj, t_rt *rt);
+
 
 #endif

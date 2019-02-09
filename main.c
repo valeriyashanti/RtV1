@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/08 13:49:53 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 14:32:43 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ double 		ray_sphere(int j, int i, t_obj *obj, t_rt *rt)
 	t_vec3 d;
 	d = vec_minus(l, rt->cam); 
 	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
+	d = vec_div(d, vec_modul(d));
+
+
 
 	k1 = vec_sc(d, d);
 	k2 = 2 * vec_sc(obj->oc, d);
@@ -136,17 +139,15 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	t_vec3 l_n;
 	l_n = vec_div(l, vec_modul(l));
 
-	//printf("color - %d  %lf %lf %lf\n", obj.col.value, l.x, l.y, l.z);
 
 	double sc; // cкаляр
-	sc = vec_sc(n, l_n);
+	sc = vec_sc(n, l);
 	//printf("sc -- %lf\n", sc);
 	double	ia ; // i / a
 	
 	if (sc > 0)
 	{
 		ia = (sc / (vec_modul(l) * vec_modul(n)));
-		// printf("z - %lf++++  %lf\n", obj.dot.z, ia);
 		t_vec3 v;
 		v = vec_minus(p, rt.cam);
 		// s1.col.rgb.r = 0xff;
@@ -195,7 +196,7 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 		ia = 0;
 	}	//rt.color = 0;
 
-		ia += 0.1; 
+		//ia += 0.2; 
 	
 		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
 		double c_b_d;
@@ -241,36 +242,103 @@ void	rtv1(t_rt *rt)
 	t_obj s1;
 	s1.dot.x = 0.0;
 	s1.dot.y = 0.0;
-	s1.dot.z = 10.0;
-	s1.radius = 1.0;
+	s1.dot.z = 6.0;
+	s1.radius = 0.5;
 	s1.col.rgb.a = 0x00;
 	s1.col.rgb.r = 0xff;
 	s1.col.rgb.g = 0x00;
 	s1.col.rgb.b = 0x00;
 	s1.specular = 1.0;
 
-	t_obj s2;
-	s2.dot.x = 0.0;
-	s2.dot.y = 40.0;
-	s2.dot.z = 15.0;
-	s2.radius = 40.0;
-	s2.col.value = 0x0000ff;
-	s2.specular = 0.1;
-	s2.reflective = 0.5;
+	// t_obj fl;
+	// fl.dot.x = 0.0;
+	// fl.dot.y = -40.5;
+	// fl.dot.z = 4.0;
+	// fl.radius = 40.0;
+	// fl.col.value = 0xff0000;
+	// fl.specular = 0.1;
+	// fl.reflective = 0.5;
+
+	// t_obj s2;
+	// s2.dot.x = 0.0;
+	// s2.dot.y = 40.5;
+	// s2.dot.z = 4.0;
+	// s2.radius = 40.0;
+	// s2.col.value = 0x00ff00;
+	// s2.specular = 0.1;
+	// s2.reflective = 0.5;
 
 	t_obj cone;
-	cone.dot.x = 0.0;
+	cone.dot.x = 0.0;    
 	cone.dot.y = 0.0;
-	cone.dot.z = 0.0;
+	cone.dot.z = 4.0;
 	cone.col.value = 0x0000ff;
 	cone.specular = 0.1;
 	cone.reflective = 0.5;
+	cone.a = 1;
+	cone.b = 1.5;
+	cone.c = 1;
 
 
-	rt->light.dot.x = -1.5;
-	rt->light.dot.y = -1.5;
-	rt->light.dot.z = 9.0;
-	rt->light.inten = 1;
+	t_obj roll;
+	roll.dot.x = 0.0;    
+	roll.dot.y = 0.0;
+	roll.dot.z = 4.0;
+	roll.col.value = 0x0000ff;
+	roll.specular = 0.1;
+	roll.reflective = 0.5;
+	roll.a = 0.5;
+	roll.b = 1;
+
+	t_obj plane;
+	plane.dot.x = -1.0;    
+	plane.dot.y = 0.0;
+	plane.dot.z = 4.0;
+	plane.col.value = 0x0000ff;
+	plane.specular = 0.1;
+	plane.reflective = 0.5;
+	plane.a = 0.5;
+	plane.b = 1;
+	plane.c = 1;
+
+	t_obj plane2;
+	plane2.dot.x = 1.0;    
+	plane2.dot.y = 0.0;
+	plane2.dot.z = 4.0;
+	plane2.col.value = 0x0000ff;
+	plane2.specular = 0.1;
+	plane2.reflective = 0.5;
+
+	t_obj cil;
+	cil.dot.x = 0.0;    
+	cil.dot.y = -1.0;
+	cil.dot.z = 4.0;
+	cil.col.value = 0x00ff00;
+	cil.specular = 0.1;
+	cil.reflective = 0.5;
+
+	t_obj fl;
+	fl.dot.x = 0.0;    
+	fl.dot.y = 1.0;
+	fl.dot.z = 4.0;
+	fl.col.value = 0x00ff00;
+	fl.specular = 0.1;
+	fl.reflective = 0.5;
+
+	t_obj wall;
+	wall.dot.x = 10.0;    
+	wall.dot.y = 10.0;
+	wall.dot.z = 5.0;
+	wall.col.value = 0x00ffff;
+	wall.specular = 0.1;
+	wall.reflective = 0.5;
+
+// light
+
+	rt->light.dot.x = 0.0;
+	rt->light.dot.y = 0.0;
+	rt->light.dot.z = 1.0;
+	rt->light.inten = 0.8;
 
 	t_obj o;
 
@@ -283,28 +351,46 @@ void	rtv1(t_rt *rt)
 			rt->res = INFINITY;
 			int col;
 			k = 0;
-			while (k < 1)
+			while (k <= 5)
 			{
-				if (k == 1)
+				if (k == 0)
 				{
-					res0 = ray_cone(j, i, &cone, rt);
-					col = cone.col.value;
-					o = cone;
+					res0 = ray_plane_x(j, i, &plane, rt);
+					col = plane.col.value;
+					o = plane;
 					// res0 = ray(j, i, &s, rt);
 					// col = s.col.value;
 					// o = s;
 				}
-				if (k == 0)
+				if (k == 1)
 				{
-				 	res0 = ray_sphere(j, i, &s1, rt);
-				 	col = s1.col.value;
-					o = s1;
+				 	res0 = ray_plane_y(j, i, &fl, rt);
+					col = fl.col.value;
+					o = fl;
 				}
 				if (k == 2)
 				 {
-					res0 = ray_sphere(j, i, &s2, rt);
-					col = s2.col.value;
-					o = s2;
+					res0 = ray_sphere(j, i, &s1, rt);
+					col = s1.col.value;
+					o = s1;
+				}
+				if (k == 3)
+				{
+					res0 = ray_plane_x(j, i, &plane2, rt);
+					col = plane2.col.value;
+					o = plane2;
+				}
+				if (k == 4)
+				{
+					res0 = ray_plane_y(j, i, &cil, rt);
+					col = cil.col.value;
+					o = cil;
+				}
+				if (k == 5)
+				{
+					res0 = ray_plane_z(j, i, &wall, rt);
+					col = wall.col.value;
+					o = wall;
 				}
 				if (res0 > 1.0 && res0 < rt->res)
 				{
@@ -312,6 +398,7 @@ void	rtv1(t_rt *rt)
 					rt->color = col;
 					rt->obj = o;
 				}
+				
 				k++;
 			}
 			// if (rt->res != INFINITY)
