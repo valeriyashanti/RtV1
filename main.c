@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 17:49:29 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 18:26:10 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,15 +148,23 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 		//ia = compute_specular(n, l, ia, v, obj.specular);
 
+		double tmp = 0.0;
+
 		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
 		double c_b_d;
 		c_b_d = (((double)(c_b) * (ia)));
+		if (c_b_d > 255)
+		 	return (0xffffff);
+		tmp += c_b_d;
 		c_b = (unsigned int)c_b_d;
 		obj.col.rgb.b = (char)c_b;
 
 		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
 		double c_r_d;
 		c_r_d = (((double)(c_r) * ia));
+		if (c_r_d > 255)
+		 	return (0xffffff);
+		tmp += c_r_d;
 		c_r = (unsigned int)c_r_d;
 		obj.col.rgb.r = (char)c_r;
 
@@ -164,10 +172,16 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
 		double c_g_d;
 		c_g_d = (((double)(c_g) * ia));
+		if (c_g_d > 255)
+		 	return (0xffffff);
+		tmp += c_g_d;
 		c_g = (unsigned int)c_g_d;
 		obj.col.rgb.g = (char)c_g;
 
-		rt.color = obj.col.value;
+	/* 	if (tmp >= 775)
+			rt.color = 0xffffff;
+		else */
+			rt.color = obj.col.value;
 	}
 	else
 	{
@@ -262,7 +276,7 @@ void	rtv1(t_rt *rt)
 
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
-	rt->light.dot.z = 4.0;
+	rt->light.dot.z = 2.8;
 	rt->light.inten = 0.1;
 
 	t_obj o;
