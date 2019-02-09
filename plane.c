@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:48:35 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 14:15:53 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 16:00:15 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,14 @@ double		ray_plane_x(int j, int  i, t_obj *obj, t_rt *rt)
 	double t1;
 	double t2;
 
-	obj->oc = vec_minus(rt->cam, obj->dot);
+
+	t_vec3 r_n;
+	r_n.x = obj->radius;
+	r_n.y = 0.0;
+	r_n.z = 0.0;
+
+
+	obj->oc = vec_minus(rt->cam, r_n);
 
 	t_vec3 d;
 	d = vec_minus(l, rt->cam); 
@@ -36,21 +43,17 @@ double		ray_plane_x(int j, int  i, t_obj *obj, t_rt *rt)
 	t_vec3 temp_d;
 	temp_d = d;
 
-	// d.x = temp_d.x * cos(0.5) - temp_d.y * sin(0.5);
-	// d.y = temp_d.x * sin(0.5) + temp_d.y * cos(0.5);
-
-
 	k1 = (d.x * d.x);
 
-
 	k2 = 2 * (d.x * obj->oc.x);
-
-
 	k3 = (obj->oc.x * obj->oc.x);
 
 	double desc = k2 * k2 - 4 * k1 * k3;
 	if(desc < 0.0)
+	{
+
 		return (-1.0);
+	}
 	t1 = (-k2 + sqrt(desc)) / (2 * k1);
 	t2 = (-k2 - sqrt(desc)) / (2 * k1);
 
@@ -67,8 +70,14 @@ double		ray_plane_x(int j, int  i, t_obj *obj, t_rt *rt)
 		if (t2 >=1 && t2 < INFINITY)
 			res = t2;
 	}
+	obj->dot.x = rt->cam.x + l.x * (res + 1);
+	obj->dot.y = rt->cam.y + l.y * res;
+	obj->dot.z = rt->cam.z + l.z * res;
+
 	return (res);
 }
+
+
 
 double		ray_plane_y(int j, int  i, t_obj *obj, t_rt *rt)
 {
@@ -84,7 +93,13 @@ double		ray_plane_y(int j, int  i, t_obj *obj, t_rt *rt)
 	double t1;
 	double t2;
 
-	obj->oc = vec_minus(rt->cam, obj->dot);
+
+	t_vec3 r_n;
+	r_n.x = 0.0;
+	r_n.y = obj->radius;
+	r_n.z = 0.0;
+
+	obj->oc = vec_minus(rt->cam, r_n);
 
 	t_vec3 d;
 	d = vec_minus(l, rt->cam); 
@@ -121,6 +136,10 @@ double		ray_plane_y(int j, int  i, t_obj *obj, t_rt *rt)
 		if (t2 >=1 && t2 < INFINITY)
 			res = t2;
 	}
+
+	obj->dot.x = rt->cam.x + l.x * res;
+	obj->dot.y = rt->cam.y + l.y * (res + 1);
+	obj->dot.z = rt->cam.z + l.z * res;
 	return (res);
 }
 
@@ -138,7 +157,12 @@ double		ray_plane_z(int j, int  i, t_obj *obj, t_rt *rt)
 	double t1;
 	double t2;
 
-	obj->oc = vec_minus(rt->cam, obj->dot);
+	t_vec3 r_n;
+	r_n.x = 0.0;
+	r_n.y = 0.0;
+	r_n.z = obj->radius;
+
+	obj->oc = vec_minus(rt->cam, r_n);
 
 	t_vec3 d;
 	d = vec_minus(l, rt->cam); 
@@ -148,16 +172,8 @@ double		ray_plane_z(int j, int  i, t_obj *obj, t_rt *rt)
 	t_vec3 temp_d;
 	temp_d = d;
 
-	// d.x = temp_d.x * cos(0.5) - temp_d.y * sin(0.5);
-	// d.y = temp_d.x * sin(0.5) + temp_d.y * cos(0.5);
-
-
 	k1 = (d.z * d.z);
-
-
 	k2 = 2 * (d.z * obj->oc.z);
-
-
 	k3 = (obj->oc.z * obj->oc.z);
 
 	double desc = k2 * k2 - 4 * k1 * k3;
@@ -179,5 +195,8 @@ double		ray_plane_z(int j, int  i, t_obj *obj, t_rt *rt)
 		if (t2 >=1 && t2 < INFINITY)
 			res = t2;
 	}
+	obj->dot.x = rt->cam.x + l.x * res;
+	obj->dot.y = rt->cam.y + l.y * res;
+	obj->dot.z = rt->cam.z + l.z * (res + 1);
 	return (res);
 }

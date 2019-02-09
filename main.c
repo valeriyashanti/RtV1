@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 14:32:43 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 16:00:09 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	/* int color_r;
 	int color_g;
 	int color_b; */
-
 	t_vec3 c;
 	c.x = (j * 1.0 - 300.0) / 600.0;
 	c.y = (i * 1.0 - 300.0) / 600.0;
@@ -242,31 +241,10 @@ void	rtv1(t_rt *rt)
 	t_obj s1;
 	s1.dot.x = 0.0;
 	s1.dot.y = 0.0;
-	s1.dot.z = 6.0;
-	s1.radius = 0.5;
-	s1.col.rgb.a = 0x00;
-	s1.col.rgb.r = 0xff;
-	s1.col.rgb.g = 0x00;
-	s1.col.rgb.b = 0x00;
+	s1.dot.z = 3.0;
+	s1.radius = 0.3;
+	s1.col.value = 0x0fff00;
 	s1.specular = 1.0;
-
-	// t_obj fl;
-	// fl.dot.x = 0.0;
-	// fl.dot.y = -40.5;
-	// fl.dot.z = 4.0;
-	// fl.radius = 40.0;
-	// fl.col.value = 0xff0000;
-	// fl.specular = 0.1;
-	// fl.reflective = 0.5;
-
-	// t_obj s2;
-	// s2.dot.x = 0.0;
-	// s2.dot.y = 40.5;
-	// s2.dot.z = 4.0;
-	// s2.radius = 40.0;
-	// s2.col.value = 0x00ff00;
-	// s2.specular = 0.1;
-	// s2.reflective = 0.5;
 
 	t_obj cone;
 	cone.dot.x = 0.0;    
@@ -279,7 +257,6 @@ void	rtv1(t_rt *rt)
 	cone.b = 1.5;
 	cone.c = 1;
 
-
 	t_obj roll;
 	roll.dot.x = 0.0;    
 	roll.dot.y = 0.0;
@@ -290,46 +267,33 @@ void	rtv1(t_rt *rt)
 	roll.a = 0.5;
 	roll.b = 1;
 
-	t_obj plane;
-	plane.dot.x = -1.0;    
-	plane.dot.y = 0.0;
-	plane.dot.z = 4.0;
-	plane.col.value = 0x0000ff;
-	plane.specular = 0.1;
-	plane.reflective = 0.5;
-	plane.a = 0.5;
-	plane.b = 1;
-	plane.c = 1;
+	t_obj pl_left;
+	pl_left.radius = -1.0;
+	pl_left.col.value = 0xff0000;
+	pl_left.specular = 0.1;
+	pl_left.reflective = 0.5;
 
-	t_obj plane2;
-	plane2.dot.x = 1.0;    
-	plane2.dot.y = 0.0;
-	plane2.dot.z = 4.0;
-	plane2.col.value = 0x0000ff;
-	plane2.specular = 0.1;
-	plane2.reflective = 0.5;
+	t_obj pl_right;
+	pl_right.radius = 1.0;
+	pl_right.col.value = 0x0000ff;
+	pl_right.specular = 0.1;
+	pl_right.reflective = 0.5;
 
-	t_obj cil;
-	cil.dot.x = 0.0;    
-	cil.dot.y = -1.0;
-	cil.dot.z = 4.0;
-	cil.col.value = 0x00ff00;
-	cil.specular = 0.1;
-	cil.reflective = 0.5;
+	t_obj pl_up;
+	pl_up.radius = -1.0;
+	pl_up.col.value = 0x00ffff;
+	pl_up.specular = 0.1;
+	pl_up.reflective = 0.5;
 
-	t_obj fl;
-	fl.dot.x = 0.0;    
-	fl.dot.y = 1.0;
-	fl.dot.z = 4.0;
-	fl.col.value = 0x00ff00;
-	fl.specular = 0.1;
-	fl.reflective = 0.5;
+	t_obj pl_down;
+	pl_down.radius = 1.0;
+	pl_down.col.value = 0xffff00;
+	pl_down.specular = 0.1;
+	pl_down.reflective = 0.5;
 
 	t_obj wall;
-	wall.dot.x = 10.0;    
-	wall.dot.y = 10.0;
-	wall.dot.z = 5.0;
-	wall.col.value = 0x00ffff;
+	wall.radius = 7.0;
+	wall.col.value = 0xff00ff;
 	wall.specular = 0.1;
 	wall.reflective = 0.5;
 
@@ -355,18 +319,18 @@ void	rtv1(t_rt *rt)
 			{
 				if (k == 0)
 				{
-					res0 = ray_plane_x(j, i, &plane, rt);
-					col = plane.col.value;
-					o = plane;
+					res0 = ray_plane_x(j, i, &pl_left, rt);
+					col = pl_left.col.value;
+					o = pl_left;
 					// res0 = ray(j, i, &s, rt);
 					// col = s.col.value;
 					// o = s;
 				}
 				if (k == 1)
 				{
-				 	res0 = ray_plane_y(j, i, &fl, rt);
-					col = fl.col.value;
-					o = fl;
+				 	res0 = ray_plane_y(j, i, &pl_down, rt);
+					col = pl_down.col.value;
+					o = pl_down;
 				}
 				if (k == 2)
 				 {
@@ -376,15 +340,15 @@ void	rtv1(t_rt *rt)
 				}
 				if (k == 3)
 				{
-					res0 = ray_plane_x(j, i, &plane2, rt);
-					col = plane2.col.value;
-					o = plane2;
+					res0 = ray_plane_x(j, i, &pl_right, rt);
+					col = pl_right.col.value;
+					o = pl_right;
 				}
 				if (k == 4)
 				{
-					res0 = ray_plane_y(j, i, &cil, rt);
-					col = cil.col.value;
-					o = cil;
+					res0 = ray_plane_y(j, i, &pl_up, rt);
+					col = pl_up.col.value;
+					o = pl_up;
 				}
 				if (k == 5)
 				{
