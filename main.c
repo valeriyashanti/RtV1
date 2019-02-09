@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 16:00:09 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/09 17:17:19 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 
 	t_vec3 d; //направление вектора луча
 	d = vec_minus(c, rt.cam); // O - C
+	// d = vec_div(d, vec_modul(d));
 
 	//printf("%lf %lf %lf\n", d.x, d.y, d.z);
 
@@ -231,17 +232,17 @@ void	rtv1(t_rt *rt)
 	int k;
 
 	t_obj s;
-	s.dot.x = -3.0;
-	s.dot.y = -3.0;
-	s.dot.z = 13.0;
-	s.radius = 1.0;
-	s.col.value = 0x00ff00;
+	s.dot.x = 0.0;
+	s.dot.y = 0.0;
+	s.dot.z = 100.0;
+	s.radius = 95.0;
+	s.col.value = 0x00ffff;
 	s.specular = 1.0;
 
 	t_obj s1;
 	s1.dot.x = 0.0;
 	s1.dot.y = 0.0;
-	s1.dot.z = 3.0;
+	s1.dot.z = 4.0;
 	s1.radius = 0.3;
 	s1.col.value = 0x0fff00;
 	s1.specular = 1.0;
@@ -292,8 +293,8 @@ void	rtv1(t_rt *rt)
 	pl_down.reflective = 0.5;
 
 	t_obj wall;
-	wall.radius = 7.0;
-	wall.col.value = 0xff00ff;
+	wall.radius = 8.0;
+	wall.col.value = 0x0000ff;
 	wall.specular = 0.1;
 	wall.reflective = 0.5;
 
@@ -302,7 +303,7 @@ void	rtv1(t_rt *rt)
 	rt->light.dot.x = 0.0;
 	rt->light.dot.y = 0.0;
 	rt->light.dot.z = 1.0;
-	rt->light.inten = 0.8;
+	rt->light.inten = 0.1;
 
 	t_obj o;
 
@@ -315,16 +316,13 @@ void	rtv1(t_rt *rt)
 			rt->res = INFINITY;
 			int col;
 			k = 0;
-			while (k <= 5)
+			while (k < 6)
 			{
 				if (k == 0)
 				{
 					res0 = ray_plane_x(j, i, &pl_left, rt);
 					col = pl_left.col.value;
 					o = pl_left;
-					// res0 = ray(j, i, &s, rt);
-					// col = s.col.value;
-					// o = s;
 				}
 				if (k == 1)
 				{
@@ -352,6 +350,12 @@ void	rtv1(t_rt *rt)
 				}
 				if (k == 5)
 				{
+					res0 = ray_sphere(j, i, &s, rt);
+					col = s.col.value;
+					o = s;
+				}
+				if (k == 99)
+				{
 					res0 = ray_plane_z(j, i, &wall, rt);
 					col = wall.col.value;
 					o = wall;
@@ -362,19 +366,13 @@ void	rtv1(t_rt *rt)
 					rt->color = col;
 					rt->obj = o;
 				}
-				
 				k++;
 			}
-			// if (rt->res != INFINITY)
-			// 	printf("res: %lf \n", rt->res);
 			if (rt->res > 1.0 && rt->res < INFINITY)
 			{
 				rt->color = get_light(rt->obj, i, j, *rt);
-				//printf("rt->color : %lf\n", rt->color);
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
 			}
-			/* else
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, 0xffffff); */
 			j++;
 		}
 		i++;
