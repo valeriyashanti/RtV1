@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:58 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 17:22:38 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 19:14:15 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ int    on_button_press_2(int key, t_rt *rt)
 	{
 		rt->move.x = 0.0;
 		rt->move.y = 0.0;
-		rt->move.z = -0.1;
+		rt->move.z = 0.1;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
-	if (key == 78)
+	if (key == 78 && rt->cam.z >= 0.1)
 	{
 		rt->move.x = 0.0;
 		rt->move.y = 0.0;
-		rt->move.z = 0.1;
+		rt->move.z = -0.1;
 		rt->cam = vec_plus(rt->cam, rt->move);
 	}
 	if (key == 24 && rt->amb < 1.0000)

@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 17:39:47 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 19:15:42 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ struct s_rt
 	double		amb;
 	t_vec3		dir;
 	t_vec3		init;
+	int			index;
 };
 
 double			vec_sc(t_vec3 a, t_vec3 b);
@@ -99,7 +100,7 @@ double			ray_plane_y(t_obj *obj, t_rt *rt);
 double			ray_plane_z(t_obj *obj, t_rt *rt);
 double 			ray_sphere(t_obj *obj, t_rt *rt);
 double			compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s);
-int				get_light(t_obj obj, t_rt *rt);
+int				get_light(t_obj *obj, t_rt *rt);
 t_vec3			init_tracing(t_rt *rt, int i, int j);
 void    		on_button_press(int key, t_rt *rt);
 int   			on_button_press_2(int key, t_rt *rt);
