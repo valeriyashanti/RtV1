@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 13:41:46 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 14:14:14 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 10:00:19 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ double      ray_cone(int j, int  i, t_obj *obj, t_rt *rt)
 	double t1;
 	double t2;
 
-	obj->oc = vec_minus(rt->cam, obj->dot);
+	obj->oc = vec_minus(rt->null, obj->dot);
 
 	t_vec3 d;
-	d = vec_minus(l, rt->cam); 
+	d = vec_minus(l, rt->null); 
     d = vec_div(d, vec_modul(d));
 
 

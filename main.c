@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 18:26:10 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 12:27:41 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ double char_to_double(char c)
 double 		ray_sphere(int j, int i, t_obj *obj, t_rt *rt)
 {
 	t_vec3 l;
-	l.x = (j * 1.0 - 300.0) / 600.0;
-	l.y = (i * 1.0 - 300.0) / 600.0;
-	l.z = 1;
+	l.x = (j * 1.0 - 300.0) / 600.0 + rt->cam.x;
+	l.y = (i * 1.0 - 300.0) / 600.0 + rt->cam.y;
+	l.z = 1 + rt->cam.z;
 
 	//obj->oc = vec_plus(obj->dot, vec_mul(rt->cam, -1));
 	obj->oc = vec_minus(rt->cam, obj->dot);
@@ -103,14 +103,9 @@ double		compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s)
 int		get_light(t_obj obj, int i, int j, t_rt rt)
 {
 	t_vec3 c;
-	c.x = (j * 1.0 - 300.0) / 600.0;
-	c.y = (i * 1.0 - 300.0) / 600.0;
-	c.z = 1.0;
-
-/* 	t_vec3 null;
-	null.x = 0.0;
-	null.y = 0.0;
-	null.z = 0.0; */
+	c.x = (j * 1.0 - 300.0) / 600.0 + rt.cam.x;
+	c.y = (i * 1.0 - 300.0) / 600.0 + rt.cam.y;
+	c.z = 1.0 + rt.cam.z;
 
 	t_vec3 d; //направление вектора луча
 	d = vec_minus(c, rt.cam);
@@ -140,21 +135,22 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	sc = vec_sc(n_n, l_n);
 	double	ia ; // i / a
 	
-	if (sc > 0)
+	if (sc > -0.00001)
 	{
 		ia = (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt.cam);
 
-		//ia = compute_specular(n, l, ia, v, obj.specular);
-
+		// ia = compute_specular(n, l, ia, v, obj.specular);
 		double tmp = 0.0;
-
+		if (ia > 1.00001)
+			ia = 1;
 		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
 		double c_b_d;
+
+
 		c_b_d = (((double)(c_b) * (ia)));
-		if (c_b_d > 255)
-		 	return (0xffffff);
+
 		tmp += c_b_d;
 		c_b = (unsigned int)c_b_d;
 		obj.col.rgb.b = (char)c_b;
@@ -162,21 +158,23 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
 		double c_r_d;
 		c_r_d = (((double)(c_r) * ia));
-		if (c_r_d > 255)
-		 	return (0xffffff);
 		tmp += c_r_d;
 		c_r = (unsigned int)c_r_d;
 		obj.col.rgb.r = (char)c_r;
 
 
+
 		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
 		double c_g_d;
 		c_g_d = (((double)(c_g) * ia));
-		if (c_g_d > 255)
-		 	return (0xffffff);
 		tmp += c_g_d;
 		c_g = (unsigned int)c_g_d;
 		obj.col.rgb.g = (char)c_g;
+		// if (c_b_d >= 255 || c_r_d >= 255 || c_g_d >= 255)
+		// {
+		// 	printf ("IA  %lf   ", ia);
+		// 	printf("blue - %lf  - %lf  - %lf \n", c_b_d, c_r_d , c_g_d);
+		// }
 
 	/* 	if (tmp >= 775)
 			rt.color = 0xffffff;
@@ -187,11 +185,8 @@ int		get_light(t_obj obj, int i, int j, t_rt rt)
 	{
 		ia = 0;
 		rt.color = 0;
-	}	//rt.color = 0;
-
+	}
 		//ia += 0.2; 
-	
-
 	return (rt.color);
 }
 
@@ -216,10 +211,18 @@ void	rtv1(t_rt *rt)
 	t_obj s1;
 	s1.dot.x = 0.0;
 	s1.dot.y = 0.0;
-	s1.dot.z = 4.0;
+	s1.dot.z = 3.5;
 	s1.radius = 0.3;
 	s1.col.value = 0x0fff00;
 	s1.specular = 1.0;
+
+	t_obj s2;
+	s2.dot.x = -0.2;
+	s2.dot.y = -0.2;
+	s2.dot.z = 3.0;
+	s2.radius = 0.3;
+	s2.col.value = 0xff00ff;
+	s2.specular = 1.0;
 
 	t_obj cone;
 	cone.dot.x = 0.0;    
@@ -233,9 +236,9 @@ void	rtv1(t_rt *rt)
 	cone.c = 1;
 
 	t_obj roll;
-	roll.dot.x = 0.0;    
-	roll.dot.y = 0.0;
-	roll.dot.z = 4.0;
+	roll.dot.x = 0.000000;    
+	roll.dot.y = 0.000000;
+	roll.dot.z = 4.000000;
 	roll.col.value = 0x0000ff;
 	roll.specular = 0.1;
 	roll.reflective = 0.5;
@@ -243,41 +246,41 @@ void	rtv1(t_rt *rt)
 	roll.b = 1;
 
 	t_obj pl_left;
-	pl_left.radius = -1.0;
+	pl_left.radius = -1.000000;
 	pl_left.col.value = 0xff0000;
-	pl_left.specular = 0.1;
-	pl_left.reflective = 0.5;
+	pl_left.specular = 0.100000;
+	pl_left.reflective = 0.500000;
 
 	t_obj pl_right;
-	pl_right.radius = 1.0;
-	pl_right.col.value = 0x0000ff;
-	pl_right.specular = 0.1;
-	pl_right.reflective = 0.5;
+	pl_right.radius = 1.000000;
+	pl_right.col.value = 0xff00ff;
+	pl_right.specular = 0.100000;
+	pl_right.reflective = 0.500000;
 
 	t_obj pl_up;
-	pl_up.radius = -1.0;
+	pl_up.radius = -1.000000;
 	pl_up.col.value = 0x00ffff;
-	pl_up.specular = 0.1;
-	pl_up.reflective = 0.5;
+	pl_up.specular = 0.100000;
+	pl_up.reflective = 0.500000;
 
 	t_obj pl_down;
-	pl_down.radius = 1.0;
+	pl_down.radius = 1.000000;
 	pl_down.col.value = 0xffff00;
 	pl_down.specular = 0.1;
 	pl_down.reflective = 0.5;
 
 	t_obj wall;
-	wall.radius = 8.0;
+	wall.radius = 7.000000;
 	wall.col.value = 0x0000ff;
-	wall.specular = 0.1;
-	wall.reflective = 0.5;
+	wall.specular = 0.100000;
+	wall.reflective = 0.500000;
 
 // light
 
-	rt->light.dot.x = 0.0;
-	rt->light.dot.y = 0.0;
-	rt->light.dot.z = 2.8;
-	rt->light.inten = 0.1;
+	rt->light.dot.x = 0.500000;
+	rt->light.dot.y = 0.500000;
+	rt->light.dot.z = 1.800000;
+	rt->light.inten = 0.100000;
 
 	t_obj o;
 
@@ -290,9 +293,9 @@ void	rtv1(t_rt *rt)
 			rt->res = INFINITY;
 			int col;
 			k = 0;
-			while (k < 6)
+			while (k < 7)
 			{
-				if (k == 0)
+				if (k == 5)
 				{
 					res0 = ray_plane_x(j, i, &pl_left, rt);
 					col = pl_left.col.value;
@@ -305,10 +308,16 @@ void	rtv1(t_rt *rt)
 					o = pl_down;
 				}
 				if (k == 2)
-				 {
+				{
 					res0 = ray_sphere(j, i, &s1, rt);
 					col = s1.col.value;
 					o = s1;
+				}
+				if (k == 6)
+				{
+					res0 = ray_sphere(j, i, &s2, rt);
+					col = s2.col.value;
+					o = s2;
 				}
 				if (k == 3)
 				{
@@ -322,11 +331,11 @@ void	rtv1(t_rt *rt)
 					col = pl_up.col.value;
 					o = pl_up;
 				}
-				if (k == 5)
+				if (k == 0)
 				{
-					res0 = ray_sphere(j, i, &s, rt);
-					col = s.col.value;
-					o = s;
+					res0 = ray_plane_z(j, i, &wall, rt);
+					col = wall.col.value;
+					o = wall;
 				}
 				if (k == 99)
 				{
@@ -421,6 +430,9 @@ int		main()
 	rt->cam.x = 0.0;
 	rt->cam.y = 0.0;
 	rt->cam.z = 0.0;
+	rt->null.x = 0.0;
+	rt->null.y = 0.0;
+	rt->null.z = 0.0;
 	rtv1(rt);
 	mlx_hook(rt->win_ptr, 2, 0, deal_key, rt);
 	mlx_hook(rt->win_ptr, 17, 0, exit_x, rt);

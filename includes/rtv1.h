@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/09 14:19:18 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 09:59:36 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct  s_rt
 	double		res;
 	int			color;
 	t_obj		obj;
+	t_vec3		null;
 }               t_rt;
 
 double			vec_sc(t_vec3 a, t_vec3 b);
