@@ -6,7 +6,7 @@
 #    By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 15:49:41 by eloren-l          #+#    #+#              #
-#    Updated: 2019/02/09 13:51:08 by gkessler         ###   ########.fr        #
+#    Updated: 2019/02/10 12:29:21 by gkessler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ FLAGS = -I$(INCLUDES)
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJECTS) $(MAIN)
-	gcc $(FLAGS) -L. -lft -o $(NAME) $(OBJECTS) minilibx_macos/libmlx.a -framework OpenGl -framework Appkit
+	gcc $(FLAGS) -L. -lft -o $(NAME) $(OBJECTS) -lmlx -framework OpenGl -framework Appkit
 
 $(LIB): $(OBJECTS_L)
 	ar rc $@ $^
