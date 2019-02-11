@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:16:47 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/03 19:01:23 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 10:46:09 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdlib.h>
 # include <string.h>
+# define BUFF_SIZE 32
+# define MAX_FD 1024
 
 typedef struct		s_list
 {

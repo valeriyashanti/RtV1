@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 19:15:42 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 12:31:04 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include "libft.h"
 
 # define W_W 600
 # define W_H 600
@@ -62,6 +63,9 @@ typedef struct  s_obj
 	double		a;
 	double		b;
 	double		c;
+	double		a_xy;
+	double		a_yz;
+	double		a_xz;
 	int			type;
 	t_vec3		r_n;
 	double		(*func)(struct s_obj *obj, struct s_rt *rt);
@@ -79,11 +83,14 @@ struct s_rt
 	int			color;
 	t_obj		obj;
 	t_obj		objects[10];
-	t_vec3		null;
 	double		amb;
 	t_vec3		dir;
 	t_vec3		init;
 	int			index;
+	double		rot_xy;
+	double		rot_yz;
+	double		rot_xz;
+	int			obj_number;
 };
 
 double			vec_sc(t_vec3 a, t_vec3 b);
@@ -109,5 +116,11 @@ double      	ray_roll(t_obj *obj, t_rt *rt);
 void			rtv1(t_rt *rt);
 int				exit_x(int a);
 t_vec3			init_direction(t_obj *obj, t_rt *rt);
+int				parser(char *file, t_rt *rt);
+int				ft_atoi_base(char *str, int base);
+int				parse_string(char *line, t_rt *rt);
+int				define_object(char *line, t_rt *rt);
+size_t			strclen(char *line, char c);
+int				parse_object(char *line, t_rt *rt, int index, int type);
 
 #endif

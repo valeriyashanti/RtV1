@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 13:41:46 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 16:28:59 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/10 21:33:38 by drestles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,16 @@ double      ray_cone(t_obj *obj, t_rt *rt)
 	t2 = (-k2 - sqrt(desc)) / (2 * k1);
 
 	double res = INFINITY;
-	if (t1 >= 1.0 && t1 < INFINITY)
+	if (t1 >= 0.0 && t1 < INFINITY)
 		res = t1;
 	if (res >= 0.0)
 	{
-		if (t2 >= 1.0 && t2 < INFINITY && t2 < res)
+		if (t2 >= 0.0 && t2 < INFINITY && t2 < res)
 			res = t2;
 	}
 	else
 	{
-		if (t2 >=1 && t2 < INFINITY)
+		if (t2 >= 0.0  && t2 < INFINITY)
 			res = t2;
 	}
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:45:05 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 19:16:57 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 13:10:13 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,11 @@ int		get_color(double ia_left, double ia, t_obj obj)
 	return (obj.col.value);
 }
 
-
-
-
 int		get_light(t_obj *obj, t_rt *rt)
 {
 	// t_vec3 d; //направление вектора луча
 	// d = vec_minus(rt->init, rt->cam);
 	// d = vec_div(d, vec_modul(d));
-
 	t_vec3 p; //точка
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
 
@@ -78,21 +74,17 @@ int		get_light(t_obj *obj, t_rt *rt)
 	t_vec3 l_n;
 	l_n = vec_div(l, vec_modul(l));
 
-
 	double sc; // cкаляр
 	sc = vec_sc(n_n, l_n);
 	double	ia ; // i / a
 	double ia_left = 0.0000000;
-
-
-
-
 	//obj->oc = vec_minus(p, c_z);
 
-	rt->dir = vec_minus(rt->light.dot, p);
+	rt->dir = vec_minus(p, rt->light.dot);
 	rt->dir = vec_div(rt->dir, vec_modul(rt->dir));
+
 	int i = 0;
-	while (i < 7)
+	while (i < rt->obj_number)
 	{
 		if (i != rt->index && rt->objects[i].type == 0)
 		{
@@ -102,27 +94,6 @@ int		get_light(t_obj *obj, t_rt *rt)
 		}
 		i++;
 	}
-
-
-/* 	if (obj->radius == 0.3)
-	{
-		rt->dir = vec_minus(rt->light.dot, p);
-		rt->dir = vec_div(rt->dir, vec_modul(rt->dir));
-		rt->objects[0].oc = vec_minus(p, c_z);
-		if (ray_sphere(&rt->objects[0], rt) != -1)
-			sc = -1.000;
-	}
- */
-
-
-
-
-
-
-
-
-
-
 	if (sc > -0.00001)
 	{
 		ia = rt->light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));

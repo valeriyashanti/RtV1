@@ -6,12 +6,12 @@
 #    By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 15:49:41 by eloren-l          #+#    #+#              #
-#    Updated: 2019/02/10 16:12:08 by gkessler         ###   ########.fr        #
+#    Updated: 2019/02/11 12:23:45 by gkessler         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MAIN = main.c
-SRCS = main.c vec_sc.c cone.c roll.c plane.c on_button_press.c ray_tracing.c compute_light.c get_light.c ray_sphere.c rtv1.c
+SRCS = main.c vec_sc.c cone.c roll.c plane.c on_button_press.c ray_tracing.c compute_light.c get_light.c ray_sphere.c rtv1.c ft_atoi_base.c parser.c parse_object.c strclen.c
 SRCS_L = $(addprefix libft/,$(SRCS_LNAME))
 SRCS_LNAME = ft_atoi.c ft_bzero.c ft_foreach.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		ft_isdigit.c ft_isprint.c ft_itoa.c ft_list_at.c ft_list_size.c ft_lstadd.c \

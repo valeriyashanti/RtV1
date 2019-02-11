@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:48:35 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 16:53:49 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 11:26:35 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,15 @@ double		ray_plane_x(t_obj *obj, t_rt *rt)
 
 	k1 = (rt->dir.x * rt->dir.x);
 	k2 = 2 * (rt->dir.x * obj->oc.x);
-	k3 = (obj->oc.x * obj->oc.x);
-
 	double desc = k2 * k2 - 4.000000 * k1 * k3;
 	if(desc <= -0.000001)
 		return (-1.0);
 	t = (-k2) / (2.000000 * k1);
 
 	double res = INFINITY;
-	if (t > 0.000000 && t < INFINITY)
+	if (t >= 0.000000 && t < INFINITY)
 		res = t;
-	obj->dot.x = rt->cam.x + rt->init.x * (res);
+	obj->dot.x = rt->cam.x + rt->init.x * (res + 1);
 	obj->dot.y = rt->cam.y + rt->init.y * res;
 	obj->dot.z = rt->cam.z + rt->init.z * res;
 	return (res);
@@ -64,7 +62,7 @@ double		ray_plane_y(t_obj *obj, t_rt *rt)
 	if (t > 0.000000 && t < INFINITY)
 		res = t;
 	obj->dot.x = rt->cam.x + rt->init.x * res;
-	obj->dot.y = rt->cam.y + rt->init.y * (res);
+	obj->dot.y = rt->cam.y + rt->init.y * (res + 1);
 	obj->dot.z = rt->cam.z + rt->init.z * res;
 	return (res);
 }
@@ -89,6 +87,6 @@ double		ray_plane_z(t_obj *obj, t_rt *rt)
 		res = t;
 	obj->dot.x = rt->cam.x + rt->init.x * res;
 	obj->dot.y = rt->cam.y + rt->init.y * res;
-	obj->dot.z = rt->cam.z + rt->init.z * res;
+	obj->dot.z = rt->cam.z + rt->init.z * (res + 1);
 	return (res);
 }
