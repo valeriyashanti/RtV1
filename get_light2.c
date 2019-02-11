@@ -1,72 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_light.c                                        :+:      :+:    :+:   */
+/*   get_light2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/10 15:45:05 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 16:59:18 by gkessler         ###   ########.fr       */
+/*   Created: 2019/02/11 14:22:16 by gkessler          #+#    #+#             */
+/*   Updated: 2019/02/11 16:59:21 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int		get_color(double ia, t_obj obj)
-{
-	double ia_left = 0;
-
-	if (ia > 1)
-	{
-		ia_left = (ia - 1.00000) / 3.0000;
-		ia_left *= 255;
-		ia = 1.00000;
-	}
-
-		unsigned int c_b = (unsigned int)obj.col.rgb.b >> 24;
-		double c_b_d;
-		c_b_d = (((double)(c_b) * (ia)));
-		c_b = (unsigned int)c_b_d;
-		if  (c_b > 255)
-			c_b = 255;
-		if ((255 - c_b) > (int)ia_left)
-			c_b += ia_left;
-		else
-			c_b = (char)255;
-		obj.col.rgb.b = (char)c_b;
-
-
-		unsigned int c_r = (unsigned int)obj.col.rgb.r >> 24;
-		double c_r_d;
-		c_r_d = (((double)(c_r) * ia));
-		c_r = (unsigned int)c_r_d;
-		if  (c_r > 255)
-			c_r = 255;
-		if ((255 - c_r) > (int)ia_left)
-			c_r += ia_left;
-		else
-			c_r = (char)255;
-		obj.col.rgb.r = (char)c_r;
-
-
-		unsigned int c_g = (unsigned int)obj.col.rgb.g >> 24;
-		double c_g_d;
-		c_g_d = (((double)(c_g) * ia));
-		c_g = (unsigned int)c_g_d;
-		if  (c_g > 255)
-			c_g = 255;
-		if ((255 - c_g) > (int)ia_left)
-			c_g += ia_left;
-		else
-			c_g = (char)255;
-		obj.col.rgb.g = (char)c_g;
-	return (obj.col.value);
-}
-
-double		get_light(t_obj *obj, t_rt *rt)
+double		get_light2(t_obj *obj, t_rt *rt)
 {
 	// t_vec3 d; //направление вектора луча
 	// d = vec_minus(rt->init, rt->cam);
+
 	// d = vec_div(d, vec_modul(d));
 	t_vec3 p; //точка
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
@@ -78,7 +28,7 @@ double		get_light(t_obj *obj, t_rt *rt)
 	n_n = vec_div(n, vec_modul(n));
 
 	t_vec3 l; //вектор луча света
-	l = vec_minus(p, rt->light.dot);
+	l = vec_minus(p, rt->light1.dot);
 
 	t_vec3 l_n;
 	l_n = vec_div(l, vec_modul(l));
@@ -89,7 +39,7 @@ double		get_light(t_obj *obj, t_rt *rt)
 	double ia_left = 0.0000000;
 	//obj->oc = vec_minus(p, c_z);
 
-	rt->dir = vec_minus(p, rt->light.dot);
+	rt->dir = vec_minus(p, rt->light1.dot);
 	rt->dir = vec_div(rt->dir, vec_modul(rt->dir));
 
 	int i = 0;
@@ -105,19 +55,13 @@ double		get_light(t_obj *obj, t_rt *rt)
 	}
 	if (sc > -0.00001)
 	{
-		ia = rt->light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
+		ia = rt->light1.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt->cam);
-
 		//ia = compute_specular(n_n, l, ia, v, obj->specular);
-		// if (ia > 1)
-		// {
-		// 	ia_left = (ia - 1.00000) / 3.0000;
-		// 	ia_left *= 255;
-		// 	ia = 1.00000;
-		// }
 	}
 	ia += rt->amb;
+
 	//ia += get_light_2(obj, rt);
 	return (ia);
 }

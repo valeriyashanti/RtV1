@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 12:31:04 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 16:57:52 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,10 @@ struct s_rt
 	t_vec3		cam;
 	t_vec3		move;
 	t_obj		light;
+	t_obj		light1;
 	double		res;
 	int			color;
+	int 		color1;
 	t_obj		obj;
 	t_obj		objects[10];
 	double		amb;
@@ -107,7 +109,7 @@ double			ray_plane_y(t_obj *obj, t_rt *rt);
 double			ray_plane_z(t_obj *obj, t_rt *rt);
 double 			ray_sphere(t_obj *obj, t_rt *rt);
 double			compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s);
-int				get_light(t_obj *obj, t_rt *rt);
+double			get_light(t_obj *obj, t_rt *rt);
 t_vec3			init_tracing(t_rt *rt, int i, int j);
 void    		on_button_press(int key, t_rt *rt);
 int   			on_button_press_2(int key, t_rt *rt);
@@ -122,5 +124,7 @@ int				parse_string(char *line, t_rt *rt);
 int				define_object(char *line, t_rt *rt);
 size_t			strclen(char *line, char c);
 int				parse_object(char *line, t_rt *rt, int index, int type);
+int				get_color(double ia, t_obj obj);
+double			get_light2(t_obj *obj, t_rt *rt);
 
 #endif

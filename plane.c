@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:48:35 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 11:26:35 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/11 14:15:16 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ double		ray_plane_x(t_obj *obj, t_rt *rt)
 
 	k1 = (rt->dir.x * rt->dir.x);
 	k2 = 2 * (rt->dir.x * obj->oc.x);
+	k3 = (obj->oc.x * obj->oc.x);
 	double desc = k2 * k2 - 4.000000 * k1 * k3;
 	if(desc <= -0.000001)
 		return (-1.0);
