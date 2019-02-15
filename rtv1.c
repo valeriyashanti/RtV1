@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 16:08:22 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 17:03:10 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 14:15:28 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,19 @@ void	rtv1(t_rt *rt)
 				// rt->dir = init_direction(&rt->objects[k], rt);
 				// rt->color1 = get_light2(&rt->obj, rt);
 				// rt->color = plus_color(get_light(&rt->obj, rt), get_light2(&rt->obj, rt));
-				double o = get_light(&rt->obj, rt);
+					double o = 0.0;
+				//if (j == 291 && i == 294)
+					o = get_light(&rt->obj, rt);
+				// if (j == 519 && i == -20)
+				// 	o = get_light(&rt->obj, rt);
+				double z = 0.0;
 				rt->dir = init_direction(&rt->objects[k], rt);
-				double z = get_light2(&rt->obj, rt);
+				//z = get_light2(&rt->obj, rt);
 				double ia = o + z;
+				// if (j == 291 && i == 294)
+				// 	printf("black %lf\n", ia);
+				// if (j == 288 && i == 301)
+				// 	printf("norm %lf\n", ia);
 				rt->color = get_color(ia, rt->obj);
 				// rt->color = (i + j);
 				// printf("%lf %lf\n%d %d\n", rt->light.inten, rt->light1.inten, i, j);

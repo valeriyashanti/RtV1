@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_sphere.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:41:51 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 21:51:29 by drestles         ###   ########.fr       */
+/*   Updated: 2019/02/15 15:41:07 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ double 		ray_sphere(t_obj *obj, t_rt *rt)
 	double k3;
 	double t1;
 	double t2;
-
+	
 	k1 = vec_sc(rt->dir, rt->dir);
 	k2 = 2 * vec_sc(obj->oc, rt->dir);
 	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);

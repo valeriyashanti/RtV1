@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:48:35 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 14:15:16 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 16:05:35 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,18 @@ double		ray_plane_x(t_obj *obj, t_rt *rt)
 	double k2;
 	double k3;
 	double t;
+	
+	t_vec3 temp_d;
+	temp_d = rt->dir;
 
-	// поворт
-	// t_vec3 temp_d;
-	// temp_d = d;
+	rt->dir.x = temp_d.x * cos(obj->a_xy) - temp_d.y * sin(obj->a_xy);
+	rt->dir.y = temp_d.x * sin(obj->a_xy) + temp_d.y * cos(obj->a_xy);
 
-	// d.x = temp_d.x * cos(0.5) - temp_d.y * sin(0.5);
-	// d.y = temp_d.x * sin(0.5) + temp_d.y * cos(0.5);
+	// rt->dir.y = temp_d.y * cos(obj->a_yz) - temp_d.z * sin(obj->a_yz);
+	// rt->dir.z = temp_d.y * sin(obj->a_yz) + temp_d.z * cos(obj->a_yz);
+
+	// rt->dir.z = temp_d.z * cos(obj->a_xz) - temp_d.x * sin(obj->a_xz);
+	// rt->dir.x = temp_d.z * sin(obj->a_xz) + temp_d.x * cos(obj->a_xz);
 
 	k1 = (rt->dir.x * rt->dir.x);
 	k2 = 2 * (rt->dir.x * obj->oc.x);
@@ -49,7 +54,32 @@ double		ray_plane_y(t_obj *obj, t_rt *rt)
 	double k2;
 	double k3;
 	double t;
+	
 
+
+	// a_xy 
+	// a_yz
+	// a_xz
+
+
+	
+	t_vec3 temp_d;
+	temp_d = rt->dir;
+
+	// rt->dir.x = temp_d.x * cos(obj->a_xy) - temp_d.y * sin(obj->a_xy);
+	// rt->dir.y = temp_d.x * sin(obj->a_xy) + temp_d.y * cos(obj->a_xy);
+
+	// rt->dir.y = temp_d.y * cos(obj->a_yz) - temp_d.z * sin(obj->a_yz);
+	// rt->dir.z = temp_d.y * sin(obj->a_yz) + temp_d.z * cos(obj->a_yz);
+
+	rt->dir.z = temp_d.z * cos(obj->a_xz) - temp_d.x * sin(obj->a_xz);
+	rt->dir.x = temp_d.z * sin(obj->a_xz) + temp_d.x * cos(obj->a_xz);
+	// t_vec3 temp_d;
+	// temp_d = rt->dir;
+
+	// rt->dir.x = temp_d.x * cos(0.2) - temp_d.y * sin(0.2);
+	// rt->dir.y = temp_d.x * sin(0.2) + temp_d.y * cos(0.2);
+	
 	k1 = (rt->dir.y * rt->dir.y);
 	k2 = 2 * (rt->dir.y * obj->oc.y);
 	k3 = (obj->oc.y * obj->oc.y);

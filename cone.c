@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drestles <drestles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 13:41:46 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/10 21:33:38 by drestles         ###   ########.fr       */
+/*   Updated: 2019/02/15 15:41:09 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ double      ray_cone(t_obj *obj, t_rt *rt)
 	double t1;
 	double t2;
 
-	// это поворот
-	// t_vec3 temp_d;
-	// temp_d = d;
+	t_vec3 rotation;
+	rotation = rt->dir;
+	rt->dir.x = rotation.x * cos(0.5) - rotation.y * sin(0.5);
+	rt->dir.y = rotation.x * sin(0.5) + rotation.y * cos(0.5);
 
-	// d.x = temp_d.x * cos(0.5) - temp_d.y * sin(0.5);
-	// d.y = temp_d.x * sin(0.5) + temp_d.y * cos(0.5);
+	obj->a = 1;
+	obj->b = 1;
+	obj->c = 1;
 
 
     k1 = ((rt->dir.z * rt->dir.z * obj->a * obj->a * obj->b * obj->b) 
@@ -62,5 +64,6 @@ double      ray_cone(t_obj *obj, t_rt *rt)
 		if (t2 >= 0.0  && t2 < INFINITY)
 			res = t2;
 	}
+	//printf("%lf\n", res);
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:45:05 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 16:59:18 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 14:28:59 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ double		get_light(t_obj *obj, t_rt *rt)
 	// d = vec_div(d, vec_modul(d));
 	t_vec3 p; //точка
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
-
 	t_vec3 n; //нормаль
 	n = vec_minus(obj->dot, p);
 
@@ -81,6 +80,7 @@ double		get_light(t_obj *obj, t_rt *rt)
 	l = vec_minus(p, rt->light.dot);
 
 	t_vec3 l_n;
+	// if (vec_modul)
 	l_n = vec_div(l, vec_modul(l));
 
 	double sc; // cкаляр
@@ -88,36 +88,36 @@ double		get_light(t_obj *obj, t_rt *rt)
 	double	ia ; // i / a
 	double ia_left = 0.0000000;
 	//obj->oc = vec_minus(p, c_z);
+	//printf ("sc = %lf\n", sc);
 
 	rt->dir = vec_minus(p, rt->light.dot);
 	rt->dir = vec_div(rt->dir, vec_modul(rt->dir));
 
 	int i = 0;
-	while (i < rt->obj_number)
+
+	
+	/* while (i < rt->obj_number)
 	{
 		if (i != rt->index && rt->objects[i].type == 0)
 		{
 			rt->objects[i].oc = vec_minus(p, rt->objects[i].dot);
-			if (rt->objects[i].func(&rt->objects[i], rt) != -1)
+			if (rt->objects[i].func(&rt->objects[i], rt) != -1 )
 				sc = -1.000;
 		}
 		i++;
-	}
+	} */
+
+
+	//printf ("sc = %lf\n", sc);
+
 	if (sc > -0.00001)
 	{
+		//printf("sc > 0 \n");
 		ia = rt->light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt->cam);
-
-		//ia = compute_specular(n_n, l, ia, v, obj->specular);
-		// if (ia > 1)
-		// {
-		// 	ia_left = (ia - 1.00000) / 3.0000;
-		// 	ia_left *= 255;
-		// 	ia = 1.00000;
-		// }
+		//ia += compute_specular(n_n, l, ia, v, obj->specular);
 	}
 	ia += rt->amb;
-	//ia += get_light_2(obj, rt);
 	return (ia);
 }

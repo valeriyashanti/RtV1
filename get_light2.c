@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 14:22:16 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 16:59:21 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 15:06:49 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ double		get_light2(t_obj *obj, t_rt *rt)
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
 
 	t_vec3 n; //нормаль
-	n = vec_minus(obj->dot, p);
+	n = vec_minus(obj->dot, p); 
 
 	t_vec3 n_n;
 	n_n = vec_div(n, vec_modul(n));
@@ -58,7 +58,7 @@ double		get_light2(t_obj *obj, t_rt *rt)
 		ia = rt->light1.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt->cam);
-		//ia = compute_specular(n_n, l, ia, v, obj->specular);
+		ia += compute_specular(n_n, l, ia, v, obj->specular);
 	}
 	ia += rt->amb;
 

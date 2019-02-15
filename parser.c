@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:18:42 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 14:15:17 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 15:06:41 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	parse_light(char *line, t_rt *rt)
 	tmp = strchr(line, ':');
 	while (*tmp)
 	{
-		if (*tmp >= '0' && *tmp <= '9')
+		if ((*tmp >= '0' && *tmp <= '9') || (*tmp == '-') || *tmp == '+')
 		{
 			num[i] = (double)ft_atoi(tmp);
 			tmp += strlen(ft_itoa(num[i]));
