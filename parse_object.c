@@ -6,11 +6,50 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:19:15 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 10:57:30 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 13:11:26 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+void		parse_current_obj(char *tmp, t_rt *rt, int index, int type)
+{
+	if (type == 0)
+	{
+		rt->objects[index].type = 0;
+		rt->objects[index].func = &ray_sphere;
+	}
+	if (type == 1)
+	{
+		rt->objects[index].type = 0;
+		rt->objects[index].a = ft_atoi(ft_strchr(tmp, 'a') + 1)/ 10;
+		rt->objects[index].func = &ray_roll;
+	}
+	if (type == 2)
+	{
+		rt->objects[index].type = 0;
+		rt->objects[index].func = &ray_cone;
+	}
+}
+
+void		parse_current_obj2(char *tmp, t_rt *rt, int index, int type)
+{
+	if (type == 3)
+	{
+		rt->objects[index].type = 1;
+		rt->objects[index].func = &ray_plane_x;
+	}
+	if (type == 4)
+	{
+		rt->objects[index].type = 2;
+		rt->objects[index].func = &ray_plane_y;
+	}
+	if (type == 5)
+	{
+		rt->objects[index].type = 3;
+		rt->objects[index].func = &ray_plane_z;
+	}
+}
 
 int		parse_object(char *line, t_rt *rt, int index, int type)
 {
@@ -38,37 +77,8 @@ int		parse_object(char *line, t_rt *rt, int index, int type)
 	rt->objects[index].a_yz = num[5] / 10.0;
 	rt->objects[index].radius = num[6] / 10.0;
 	rt->objects[index].col.value = ft_atoi_base(tmp, 16);
-	if (type == 0)
-	{
-		rt->objects[index].type = 0;
-		rt->objects[index].func = &ray_sphere;
-		rt->objects[index].specular = 150.0000;
-	}
-	if (type == 1)
-	{
-		rt->objects[index].type = 0;
-		rt->objects[index].func = &ray_roll;
-	}
-	if (type == 2)
-	{
-		rt->objects[index].type = 0;
-		rt->objects[index].func = &ray_cone;
-	}
-	if (type == 3)
-	{
-		rt->objects[index].type = 1;
-		rt->objects[index].func = &ray_plane_x;
-	}
-	if (type == 4)
-	{
-		rt->objects[index].type = 2;
-		rt->objects[index].func = &ray_plane_y;
-	}
-	if (type == 5)
-	{
-		rt->objects[index].type = 3;
-		rt->objects[index].func = &ray_plane_z;
-	}
+	parse_current_obj(tmp, rt, index, type);
+	parse_current_obj2(tmp, rt, index, type);
 	return (index + 1);
 }
 

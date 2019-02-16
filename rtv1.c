@@ -6,20 +6,19 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 16:08:22 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 20:15:49 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 13:40:34 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int plus_color(int color1, int color2)
+int			plus_color(int color1, int color2)
 {
 	t_color color_u1;
 	t_color color_u2;
 
 	color_u1.value = color1;
 	color_u2.value = color2;
-
 	if (((int)color_u1.rgb.b + (int)color_u2.rgb.b) > 255)
 		color_u1.rgb.b = (char)255;
 	else
@@ -34,68 +33,70 @@ int plus_color(int color1, int color2)
 		color_u1.rgb.r = (char)255;
 	else
 		color_u1.rgb.r += color_u2.rgb.r;
-/* 		
-	color_u1.rgb.g += color_u2.rgb.g;
-	color_u1.rgb.r += color_u2.rgb.r; */
-
 	color1 = color_u1.value;
 	return (color1);
 }
 
 
+void			put_objects_pixel(t_rt *rt, int j, int i)
+{
+	int z;
 
-void	rtv1(t_rt *rt)
+	z = 1;
+	rt->obj.ia = get_light(&rt->obj, rt, rt->light[0]);
+	while (rt->light[z].type == 1)
+	{
+		rt->dir = init_direction(&rt->objects[z], rt, rt->light[z]);
+		rt->obj.ia += get_light(&rt->obj, rt, rt->light[z]);
+		z++;
+	}
+	rt->color = get_color(rt->obj.ia, rt->obj);
+	mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
+}
+
+void			check_distance(t_rt *rt, int j, int i)
+{
+	double	res;
+	int		k;
+	int		col;
+	t_obj	o;
+
+	k = 0;
+	while (k < rt->obj_number)
+	{
+		rt->init = init_tracing(rt, i, j);
+		if (rt->light[0].type == 1)
+			rt->dir = init_direction(&rt->objects[k], rt, rt->light[0]);
+		res = rt->objects[k].func(&rt->objects[k] , rt);
+		col = rt->objects[k].col.value;
+		o = rt->objects[k];
+		if (res >= 0.0 && res < rt->res)
+		{
+			rt->res = res;
+			rt->color = col;
+			rt->obj = o;
+			rt->index = k;
+		}
+		k++;
+	}
+	if (rt->res >= 0.0 && rt->res < INFINITY)
+		put_objects_pixel(rt, j, i);
+}
+
+void			rtv1(t_rt *rt)
 {
 	int i;
 	int j;
-	int r;
-	double res;
-	double res0;
-	int k;
-
-	t_obj o;
-
+	int z;
+	
 	i = 0;
 	while (i < W_H)
 	{
 		j = 0;
 		while (j < W_W)
 		{
-			TMP1 = 0;
-			TMP2 = 0;
-			if (i == 560 && j == 520)
-				TMP1 = 1;
-			if (i == 184 && j == 173)
-				TMP2 = 1;
-			STATE = 0;
 			rt->res = INFINITY;
-			int col;
-			k = 0;
-			while (k < rt->obj_number)
-			{
-				rt->init = init_tracing(rt, i, j);
-				rt->dir = init_direction(&rt->objects[k], rt);
-				res0 = rt->objects[k].func(&rt->objects[k] , rt);
-				col = rt->objects[k].col.value;
-				o = rt->objects[k];
-				if (res0 >= 0.0 && res0 < rt->res)
-				{
-					rt->res = res0;
-					rt->color = col;
-					rt->obj = o;
-					rt->index = k;
-				}
-				k++;
-			}
-			if (rt->res >= 0.0 && rt->res < INFINITY)
-			{
-				double ia_1 = get_light(&rt->obj, rt);
-				rt->dir = init_direction(&rt->objects[k], rt);
-				double ia_2 = get_light2(&rt->obj, rt);
-				double ia = ia_1;// + ia_2;
-				rt->color = get_color(ia, rt->obj);
-				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
-			}
+			check_distance(rt, j, i);
 			j++;
 		}
 		i++;

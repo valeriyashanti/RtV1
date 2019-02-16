@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:45:05 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 10:57:57 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 12:49:58 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,9 @@ int		get_color(double ia, t_obj obj)
 	return (obj.col.value);
 }
 
-double		get_light(t_obj *obj, t_rt *rt)
+double		get_light(t_obj *obj, t_rt *rt, t_obj light)
 {
-		STATE = 1;
-		
+	STATE = 1;
 	t_vec3 p; //точка
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
 	
@@ -77,7 +76,7 @@ double		get_light(t_obj *obj, t_rt *rt)
 	n_n = vec_div(n, vec_modul(n));
 
 	t_vec3 l; //вектор луча света
-	l = vec_minus(p, rt->light.dot);
+	l = vec_minus(p, light.dot);
 
 	t_vec3 l_n;
 	l_n = vec_div(l, vec_modul(l));
@@ -87,7 +86,7 @@ double		get_light(t_obj *obj, t_rt *rt)
 	double	ia ; // i / a
 	double ia_left = 0.0000000;
 
-	rt->dir = vec_minus(p, rt->light.dot);
+	rt->dir = vec_minus(p, light.dot);
 	//ssrt->dir = vec_div(rt->dir, vec_modul(rt->dir));
 
 	int i = 0;
@@ -101,32 +100,15 @@ double		get_light(t_obj *obj, t_rt *rt)
 				sc = -1.000;
 		}
 		i++;
-		// if (i != rt->index && rt->objects[i].type == 0)
-		// {
-		// 	/**/
-		// 	rt->objects[i].oc = vec_minus(p, rt->light.dot);
-		// 		if (TMP1)
-		// 			printf("[1] OC: %lf %lf %lf \n", rt->objects[i].oc.x, rt->objects[i].oc.y, rt->objects[i].oc.z);
-		// 		if (TMP2)
-		// 			printf("[2] OC: %lf %lf %lf \n", rt->objects[i].oc.x, rt->objects[i].oc.y, rt->objects[i].oc.z);
-		// 	if (rt->objects[i].func(&rt->objects[i], rt) < INFINITY && rt->objects[i].func(&rt->objects[i], rt) != -1)
-		// 	{
-		// 		if (TMP1)
-		// 			printf("[1] ALERT!\n");
-		// 		if (TMP2)
-		// 			printf("[2] ALERT!\n");
-		// 		sc = -1.000;
-		// 	}
-		// }
-		// i++;
 	}
 	if (sc > -0.000001)
 	{
-		ia = rt->light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
+		ia = light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt->cam);
 		//ia += compute_specular(n_n, l, ia, v, obj->specular);
 	}
+	// printf ("anbient = %f\n", rt->amb);
 	ia += rt->amb;
 	return (ia);
 }
