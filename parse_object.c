@@ -6,13 +6,13 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:19:15 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 15:47:19 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 17:00:57 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void		parse_current_obj(char *tmp, t_rt *rt, int index, int type)
+void			parse_current_obj(char *tmp, t_rt *rt, int index, int type)
 {
 	if (type == 0)
 	{
@@ -32,7 +32,7 @@ void		parse_current_obj(char *tmp, t_rt *rt, int index, int type)
 	}
 }
 
-void		parse_current_obj2(char *tmp, t_rt *rt, int index, int type)
+void			parse_current_obj2(char *tmp, t_rt *rt, int index, int type)
 {
 	if (type == 3)
 	{
@@ -51,7 +51,7 @@ void		parse_current_obj2(char *tmp, t_rt *rt, int index, int type)
 	}
 }
 
-void	array_to_obj(t_rt *rt, int index, double num[7], char *tmp)
+void			array_to_obj(t_rt *rt, int index, double num[7], char *tmp)
 {
 	rt->objects[index].dot.x = num[0] / 10.0;
 	rt->objects[index].dot.y = num[1] / 10.0;
@@ -62,11 +62,12 @@ void	array_to_obj(t_rt *rt, int index, double num[7], char *tmp)
 	rt->objects[index].radius = num[6] / 10.0;
 	rt->objects[index].col.value = ft_atoi_base(tmp, 16);
 }
-int		parse_object(char *line, t_rt *rt, int index, int type)
+
+int				parse_object(char *line, t_rt *rt, int index, int type)
 {
-	char *tmp;
-	double num[7];
-	int i;
+	char		*tmp;
+	double		num[7];
+	int			i;
 
 	i = 0;
 	tmp = strchr(line, ':');
@@ -87,7 +88,7 @@ int		parse_object(char *line, t_rt *rt, int index, int type)
 	return (index + 1);
 }
 
-int		define_object(char *line, t_rt *rt)
+int				define_object(char *line, t_rt *rt)
 {
 	if (!(ft_strncmp(line, "sphere", strclen(line, ':'))))
 		return (0);

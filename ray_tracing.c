@@ -6,13 +6,13 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:46:06 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 15:42:31 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 16:52:03 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-t_vec3	init_tracing(t_rt *rt, int i, int j)
+t_vec3		init_tracing(t_rt *rt, int i, int j)
 {
 	t_vec3 init_vec;
 	t_vec3 temp_d;
@@ -30,23 +30,23 @@ t_vec3	init_tracing(t_rt *rt, int i, int j)
 	return (init_vec);
 }
 
-void	init_obj(t_obj *obj)
+void		init_obj(t_obj *obj)
 {
 	obj->res = 0;
 	obj->desc = 0;
 }
 
-t_vec3	 init_direction(t_obj *obj, t_rt *rt)
+t_vec3		init_direction(t_obj *obj, t_rt *rt)
 {
 	t_vec3 dir;
-	init_obj(obj);
 
-	dir = vec_minus(rt->init, rt->cam); 
+	init_obj(obj);
+	dir = vec_minus(rt->init, rt->cam);
 	dir = vec_div(dir, vec_modul(dir));
 	return (dir);
 }
 
-void	init_objects_oc(t_obj *obj, t_rt *rt, t_obj light)
+void		init_objects_oc(t_obj *obj, t_rt *rt, t_obj light)
 {
 	if (obj->type == 0)
 	{

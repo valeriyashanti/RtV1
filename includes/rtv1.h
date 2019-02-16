@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 15:42:27 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 17:02:36 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,10 @@
 # define M_W 300
 # define M_H 300
 
-int TMP1;
-int TMP2;
-int STATE;
-
-typedef struct  s_rt t_rt;
+typedef struct s_rt	t_rt;
 
 typedef struct	s_rgb
-{	
+{
 	char		b;
 	char		g;
 	char		r;
@@ -48,16 +44,16 @@ typedef union	u_color
 	int			value;
 }				t_color;
 
-typedef struct  s_vec3
+typedef struct	s_vec3
 {
-	double      x;
-	double      y;
-	double      z;
-}               t_vec3;
+	double		x;
+	double		y;
+	double		z;
+}				t_vec3;
 
-typedef struct  s_obj
+typedef struct	s_obj
 {
-	t_vec3      dot;
+	t_vec3		dot;
 	t_vec3		oc;
 	double		radius;
 	t_color		col;
@@ -75,10 +71,14 @@ typedef struct  s_obj
 	double		ia;
 	double		res;
 	double		desc;
+	t_vec3		p;
+	t_vec3		l;
+	t_vec3		n;
+	t_vec3		v;
 	double		(*func)(struct s_obj *obj, struct s_rt *rt);
 }				t_obj;
 
-struct s_rt
+struct			s_rt
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
@@ -103,26 +103,27 @@ struct s_rt
 double			vec_sc(t_vec3 a, t_vec3 b);
 t_vec3			vec_mul(t_vec3 a, double n);
 t_vec3			vec_plus(t_vec3 a, t_vec3 b);
-t_vec3 			vec_minus(t_vec3 a, t_vec3 b);
+t_vec3			vec_minus(t_vec3 a, t_vec3 b);
 t_vec3			vec_div(t_vec3 a, double n);
 double			vec_mod_div(t_vec3 a, t_vec3 b);
 double			vec_modul(t_vec3 a);
-double   		ray_cone(t_obj *obj, t_rt *rt);
-double      	ray_roll(t_obj *obj, t_rt *rt);
+double			ray_cone(t_obj *obj, t_rt *rt);
+double			ray_roll(t_obj *obj, t_rt *rt);
 double			ray_plane_x(t_obj *obj, t_rt *rt);
 double			ray_plane_y(t_obj *obj, t_rt *rt);
 double			ray_plane_z(t_obj *obj, t_rt *rt);
-double 			ray_sphere(t_obj *obj, t_rt *rt);
-double			compute_specular(t_vec3 n, t_vec3 l, double ia, t_vec3 v, double s);
+double			ray_sphere(t_obj *obj, t_rt *rt);
+double			compute_specular(t_vec3 n, t_vec3 l, double ia,
+t_vec3 v, double s);
 double			get_light(t_obj *obj, t_rt *rt, t_obj light);
 t_vec3			init_tracing(t_rt *rt, int i, int j);
-void    		on_button_press(int key, t_rt *rt);
-int   			on_button_press_2(int key, t_rt *rt);
+void			on_button_press(int key, t_rt *rt);
+int				on_button_press_2(int key, t_rt *rt);
 int				deal_key(int key, t_rt *rt);
-double      	ray_roll(t_obj *obj, t_rt *rt);
+double			ray_roll(t_obj *obj, t_rt *rt);
 void			rtv1(t_rt *rt);
 int				exit_x(int a);
-void 			init_objects_oc(t_obj *obj, t_rt *rt, t_obj light);
+void			init_objects_oc(t_obj *obj, t_rt *rt, t_obj light);
 int				parser(char *file, t_rt *rt);
 int				ft_atoi_base(char *str, int base);
 int				parse_string(char *line, t_rt *rt);
@@ -131,5 +132,7 @@ size_t			strclen(char *line, char c);
 int				parse_object(char *line, t_rt *rt, int index, int type);
 int				get_color(double ia, t_obj obj);
 t_vec3			init_direction(t_obj *obj, t_rt *rt);
+double			calc_res(double k1, double k2, double k3);
+void			rotate_obj(t_obj *obj, t_rt *rt);
 
 #endif

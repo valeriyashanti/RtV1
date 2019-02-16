@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:48:35 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 15:42:25 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 16:59:26 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ double		ray_plane_x(t_obj *obj, t_rt *rt)
 	double k2;
 	double k3;
 	double t;
-	
 	t_vec3 temp_d;
+
 	temp_d = rt->dir;
 	rt->dir.x = temp_d.x * cos(obj->a_xy) - temp_d.y * sin(obj->a_xy);
 	rt->dir.y = temp_d.x * sin(obj->a_xy) + temp_d.y * cos(obj->a_xy);
@@ -27,7 +27,7 @@ double		ray_plane_x(t_obj *obj, t_rt *rt)
 	k2 = 2.0 * (rt->dir.x * obj->oc.x);
 	k3 = (obj->oc.x * obj->oc.x);
 	obj->desc = k2 * k2 - 4.000000 * k1 * k3;
-	if(obj->desc <= -0.000001)
+	if (obj->desc <= -0.000001)
 		return (-1.0);
 	t = (-k2) / (2.000000 * k1);
 	obj->res = INFINITY;
@@ -45,8 +45,8 @@ double		ray_plane_y(t_obj *obj, t_rt *rt)
 	double k2;
 	double k3;
 	double t;
-		
 	t_vec3 temp_d;
+
 	temp_d = rt->dir;
 	rt->dir.x = temp_d.x * cos(obj->a_xy) - temp_d.y * sin(obj->a_xy);
 	rt->dir.y = temp_d.x * sin(obj->a_xy) + temp_d.y * cos(obj->a_xy);
@@ -54,7 +54,7 @@ double		ray_plane_y(t_obj *obj, t_rt *rt)
 	k2 = 2.0 * (rt->dir.y * obj->oc.y);
 	k3 = (obj->oc.y * obj->oc.y);
 	obj->desc = k2 * k2 - 4.000000 * k1 * k3;
-	if(obj->desc <= -0.000001)
+	if (obj->desc <= -0.000001)
 		return (-1.0);
 	t = (-k2) / (2.000000 * k1);
 	obj->res = INFINITY;
@@ -72,8 +72,8 @@ double		ray_plane_z(t_obj *obj, t_rt *rt)
 	double k2;
 	double k3;
 	double t;
-	
 	t_vec3 temp_d;
+
 	temp_d = rt->dir;
 	rt->dir.x = temp_d.x * cos(obj->a_xy) - temp_d.y * sin(obj->a_xy);
 	rt->dir.y = temp_d.x * sin(obj->a_xy) + temp_d.y * cos(obj->a_xy);
@@ -81,7 +81,7 @@ double		ray_plane_z(t_obj *obj, t_rt *rt)
 	k2 = 2.0 * (rt->dir.z * obj->oc.z);
 	k3 = (obj->oc.z * obj->oc.z);
 	obj->desc = k2 * k2 - 4.000000 * k1 * k3;
-	if(obj->desc <= -0.000001)
+	if (obj->desc <= -0.000001)
 		return (-1.0);
 	t = (-k2) / (2.000000 * k1);
 	obj->res = INFINITY;

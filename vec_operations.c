@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_sphere.c                                       :+:      :+:    :+:   */
+/*   vec_operations.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/10 15:41:51 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 16:59:28 by gkessler         ###   ########.fr       */
+/*   Created: 2019/02/16 15:58:18 by gkessler          #+#    #+#             */
+/*   Updated: 2019/02/16 16:50:50 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-double	ray_sphere(t_obj *obj, t_rt *rt)
+double			vec_modul(t_vec3 a)
 {
-	double k1;
-	double k2;
-	double k3;
+	return (sqrt(vec_sc(a, a)));
+}
 
-	k1 = vec_sc(rt->dir, rt->dir);
-	k2 = 2.0 * vec_sc(obj->oc, rt->dir);
-	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);
-	return (calc_res(k1, k2, k3));
+double			vec_mod_div(t_vec3 a, t_vec3 b)
+{
+	t_vec3 c;
+
+	c = vec_minus(a, b);
+	return (sqrt(vec_sc(c, c)));
 }
