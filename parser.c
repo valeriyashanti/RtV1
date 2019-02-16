@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:18:42 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 16:54:01 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:32:47 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		parse_cam(char *line, t_rt *rt)
 	tmp = strchr(line, ':');
 	while (*tmp)
 	{
-		if (*tmp >= '0' && *tmp <= '9')
+		if ((*tmp >= '0' && *tmp <= '9') || (*tmp == '-') || *tmp == '+')
 		{
 			num[i] = (double)ft_atoi(tmp);
 			tmp += strlen(ft_itoa(num[i]));
@@ -80,15 +80,22 @@ int			parse_string(char *line, t_rt *rt)
 	int			type;
 
 	type = -1;
-	if (!(ft_strncmp(line, "cam", strclen(line, ':'))))
-		parse_cam(line, rt);
-	if (!(ft_strncmp(line, "light", strclen(line, ':'))))
-		light_index = parse_light(line, rt, light_index);
-	if (!(ft_strncmp(line, "ambient", strclen(line, ':'))))
-		parse_ambient(line, rt);
-	if ((type = define_object(line, rt)) >= 0)
-		index = parse_object(line, rt, index, type);
-	rt->obj_number = index;
+	if (!(ft_strncmp(line, "#rtv1", strclen(line, ':'))))
+		rt->valid = 1;
+	if (rt->valid == 1)
+	{
+		if (!(ft_strncmp(line, "cam", strclen(line, ':'))))
+			parse_cam(line, rt);
+		if (!(ft_strncmp(line, "light", strclen(line, ':'))))
+			light_index = parse_light(line, rt, light_index);
+		if (!(ft_strncmp(line, "ambient", strclen(line, ':'))))
+			parse_ambient(line, rt);
+		if ((type = define_object(line, rt)) >= 0)
+			index = parse_object(line, rt, index, type);
+			rt->obj_number = index;
+	}
+	else
+		ft_error("Not a valid rtv1 file : (");
 	return (0);
 }
 
@@ -97,7 +104,8 @@ int			parser(char *file, t_rt *rt)
 	char	*line;
 	int		fd;
 
-	fd = open(file, O_RDONLY);
+	if (!(fd = open(file, O_RDONLY)))
+		ft_error("Wrong file");
 	while ((get_next_line(fd, &line) > 0))
 		parse_string(line, rt);
 	close(fd);

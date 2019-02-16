@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:19:15 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 17:00:57 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:06:44 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int				parse_object(char *line, t_rt *rt, int index, int type)
 		if (*tmp)
 			tmp++;
 	}
+	if (i < 7)
+		ft_error("Wrong number of coordinates");
 	array_to_obj(rt, index, num, tmp);
 	parse_current_obj(tmp, rt, index, type);
 	parse_current_obj2(tmp, rt, index, type);

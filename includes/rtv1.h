@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 17:02:36 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:27:21 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@
 # include <math.h>
 # include "libft.h"
 
-# define W_W 600
-# define W_H 600
-# define M_W 300
-# define M_H 300
+# define W_W 700
+# define W_H 700
 
 typedef struct s_rt	t_rt;
 
@@ -98,6 +96,7 @@ struct			s_rt
 	double		rot_yz;
 	double		rot_xz;
 	int			obj_number;
+	int			valid;
 };
 
 double			vec_sc(t_vec3 a, t_vec3 b);
@@ -134,5 +133,6 @@ int				get_color(double ia, t_obj obj);
 t_vec3			init_direction(t_obj *obj, t_rt *rt);
 double			calc_res(double k1, double k2, double k3);
 void			rotate_obj(t_obj *obj, t_rt *rt);
+int				ft_error(char *line);
 
 #endif
