@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:46:06 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 12:27:32 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 15:42:31 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,24 @@ t_vec3	init_tracing(t_rt *rt, int i, int j)
 	return (init_vec);
 }
 
-t_vec3 init_direction(t_obj *obj, t_rt *rt, t_obj light)
+void	init_obj(t_obj *obj)
+{
+	obj->res = 0;
+	obj->desc = 0;
+}
+
+t_vec3	 init_direction(t_obj *obj, t_rt *rt)
 {
 	t_vec3 dir;
+	init_obj(obj);
 
+	dir = vec_minus(rt->init, rt->cam); 
+	dir = vec_div(dir, vec_modul(dir));
+	return (dir);
+}
+
+void	init_objects_oc(t_obj *obj, t_rt *rt, t_obj light)
+{
 	if (obj->type == 0)
 	{
 		obj->oc = vec_minus(rt->cam, obj->dot);
@@ -59,7 +73,4 @@ t_vec3 init_direction(t_obj *obj, t_rt *rt, t_obj light)
 		obj->r_n.z = obj->radius;
 		obj->oc = vec_minus(rt->cam, obj->r_n);
 	}
-	dir = vec_minus(rt->init, rt->cam); 
-	dir = vec_div(dir, vec_modul(dir));
-	return (dir);
 }

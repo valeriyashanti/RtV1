@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 13:41:46 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 17:36:04 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 15:42:30 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ double      ray_cone(t_obj *obj, t_rt *rt)
 	obj->a = 1.0;
 	obj->b = 1.0;
 	obj->c = 1.0;
+
 
     k1 = ((rt->dir.z * rt->dir.z * obj->a * obj->a * obj->b * obj->b) 
 	+ (rt->dir.x * rt->dir.x * obj->c* obj->c * obj->b * obj->b)

@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:19:15 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 13:11:26 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 15:47:19 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		parse_current_obj(char *tmp, t_rt *rt, int index, int type)
 	if (type == 1)
 	{
 		rt->objects[index].type = 0;
-		rt->objects[index].a = ft_atoi(ft_strchr(tmp, 'a') + 1)/ 10;
+		rt->objects[index].a = ft_atoi(ft_strchr(tmp, 'a') + 1) / 10.0;
 		rt->objects[index].func = &ray_roll;
 	}
 	if (type == 2)
@@ -51,12 +51,24 @@ void		parse_current_obj2(char *tmp, t_rt *rt, int index, int type)
 	}
 }
 
+void	array_to_obj(t_rt *rt, int index, double num[7], char *tmp)
+{
+	rt->objects[index].dot.x = num[0] / 10.0;
+	rt->objects[index].dot.y = num[1] / 10.0;
+	rt->objects[index].dot.z = num[2] / 10.0;
+	rt->objects[index].a_xy = num[3] / 10.0;
+	rt->objects[index].a_xz = num[4] / 10.0;
+	rt->objects[index].a_yz = num[5] / 10.0;
+	rt->objects[index].radius = num[6] / 10.0;
+	rt->objects[index].col.value = ft_atoi_base(tmp, 16);
+}
 int		parse_object(char *line, t_rt *rt, int index, int type)
 {
 	char *tmp;
 	double num[7];
-	int i = 0;
+	int i;
 
+	i = 0;
 	tmp = strchr(line, ':');
 	while (i < 7 && *tmp)
 	{
@@ -69,14 +81,7 @@ int		parse_object(char *line, t_rt *rt, int index, int type)
 		if (*tmp)
 			tmp++;
 	}
-	rt->objects[index].dot.x = num[0] / 10.0;
-	rt->objects[index].dot.y = num[1] / 10.0;
-	rt->objects[index].dot.z = num[2] / 10.0;
-	rt->objects[index].a_xy = num[3] / 10.0;
-	rt->objects[index].a_xz = num[4] / 10.0;
-	rt->objects[index].a_yz = num[5] / 10.0;
-	rt->objects[index].radius = num[6] / 10.0;
-	rt->objects[index].col.value = ft_atoi_base(tmp, 16);
+	array_to_obj(rt, index, num, tmp);
 	parse_current_obj(tmp, rt, index, type);
 	parse_current_obj2(tmp, rt, index, type);
 	return (index + 1);

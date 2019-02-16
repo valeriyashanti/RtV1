@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 16:08:22 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 13:40:34 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 15:42:34 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void			put_objects_pixel(t_rt *rt, int j, int i)
 	rt->obj.ia = get_light(&rt->obj, rt, rt->light[0]);
 	while (rt->light[z].type == 1)
 	{
-		rt->dir = init_direction(&rt->objects[z], rt, rt->light[z]);
+		init_objects_oc(&rt->objects[z], rt, rt->light[z]);
+		rt->dir = init_direction(&rt->objects[z], rt);
 		rt->obj.ia += get_light(&rt->obj, rt, rt->light[z]);
 		z++;
 	}
@@ -65,8 +66,8 @@ void			check_distance(t_rt *rt, int j, int i)
 	while (k < rt->obj_number)
 	{
 		rt->init = init_tracing(rt, i, j);
-		if (rt->light[0].type == 1)
-			rt->dir = init_direction(&rt->objects[k], rt, rt->light[0]);
+		init_objects_oc(&rt->objects[k], rt, rt->light[0]);
+		rt->dir = init_direction(&rt->objects[k], rt);
 		res = rt->objects[k].func(&rt->objects[k] , rt);
 		col = rt->objects[k].col.value;
 		o = rt->objects[k];

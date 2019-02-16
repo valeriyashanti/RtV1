@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 13:15:41 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 15:42:27 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ typedef struct  s_obj
 	int			type;
 	t_vec3		r_n;
 	double		ia;
+	double		res;
+	double		desc;
 	double		(*func)(struct s_obj *obj, struct s_rt *rt);
 }				t_obj;
 
@@ -120,7 +122,7 @@ int				deal_key(int key, t_rt *rt);
 double      	ray_roll(t_obj *obj, t_rt *rt);
 void			rtv1(t_rt *rt);
 int				exit_x(int a);
-t_vec3			init_direction(t_obj *obj, t_rt *rt, t_obj light);
+void 			init_objects_oc(t_obj *obj, t_rt *rt, t_obj light);
 int				parser(char *file, t_rt *rt);
 int				ft_atoi_base(char *str, int base);
 int				parse_string(char *line, t_rt *rt);
@@ -128,5 +130,6 @@ int				define_object(char *line, t_rt *rt);
 size_t			strclen(char *line, char c);
 int				parse_object(char *line, t_rt *rt, int index, int type);
 int				get_color(double ia, t_obj obj);
+t_vec3			init_direction(t_obj *obj, t_rt *rt);
 
 #endif
