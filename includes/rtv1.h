@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 19:27:21 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 21:28:14 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <math.h>
 # include "libft.h"
 
-# define W_W 700
-# define W_H 700
+# define W_W 600.0
+# define W_H 600.0
 
 typedef struct s_rt	t_rt;
 
@@ -87,7 +87,7 @@ struct			s_rt
 	double		res;
 	int			color;
 	t_obj		obj;
-	t_obj		objects[10];
+	t_obj		objects[20];
 	double		amb;
 	t_vec3		dir;
 	t_vec3		init;

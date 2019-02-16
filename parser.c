@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:18:42 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 19:32:47 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 21:39:27 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int			parse_string(char *line, t_rt *rt)
 			parse_ambient(line, rt);
 		if ((type = define_object(line, rt)) >= 0)
 			index = parse_object(line, rt, index, type);
-			rt->obj_number = index;
+		rt->obj_number = index;
 	}
 	else
 		ft_error("Not a valid rtv1 file : (");
@@ -104,7 +104,7 @@ int			parser(char *file, t_rt *rt)
 	char	*line;
 	int		fd;
 
-	if (!(fd = open(file, O_RDONLY)))
+	if (!(fd = open(file, O_RDONLY)) || fd == -1)
 		ft_error("Wrong file");
 	while ((get_next_line(fd, &line) > 0))
 		parse_string(line, rt);

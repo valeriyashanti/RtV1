@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:46:06 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/16 16:52:03 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 20:23:58 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ t_vec3		init_tracing(t_rt *rt, int i, int j)
 	t_vec3 init_vec;
 	t_vec3 temp_d;
 
-	init_vec.x = (j * 1.0 - 300.0) / 600.0 + rt->cam.x;
-	init_vec.y = (i * 1.0 - 300.0) / 600.0 + rt->cam.y;
+	init_vec.x = (j * 1.0 - W_W / 2.0) / W_W + rt->cam.x;
+	init_vec.y = (i * 1.0 - W_H / 2.0) / W_H + rt->cam.y;
 	init_vec.z = 1.0 + rt->cam.z;
 	temp_d = init_vec;
 	init_vec.x = temp_d.x * cos(rt->rot_xy) - temp_d.y * sin(rt->rot_xy);
