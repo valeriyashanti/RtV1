@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 16:08:22 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 14:15:28 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 20:15:49 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,23 @@ void	rtv1(t_rt *rt)
 		j = 0;
 		while (j < W_W)
 		{
+			TMP1 = 0;
+			TMP2 = 0;
+			if (i == 560 && j == 520)
+				TMP1 = 1;
+			if (i == 184 && j == 173)
+				TMP2 = 1;
+			STATE = 0;
 			rt->res = INFINITY;
 			int col;
 			k = 0;
 			while (k < rt->obj_number)
 			{
-
 				rt->init = init_tracing(rt, i, j);
 				rt->dir = init_direction(&rt->objects[k], rt);
 				res0 = rt->objects[k].func(&rt->objects[k] , rt);
 				col = rt->objects[k].col.value;
 				o = rt->objects[k];
-
 				if (res0 >= 0.0 && res0 < rt->res)
 				{
 					rt->res = res0;
@@ -84,28 +89,11 @@ void	rtv1(t_rt *rt)
 			}
 			if (rt->res >= 0.0 && rt->res < INFINITY)
 			{
-				// rt->color = get_light(&rt->obj, rt);
-				// rt->dir = init_direction(&rt->objects[k], rt);
-				// rt->color1 = get_light2(&rt->obj, rt);
-				// rt->color = plus_color(get_light(&rt->obj, rt), get_light2(&rt->obj, rt));
-					double o = 0.0;
-				//if (j == 291 && i == 294)
-					o = get_light(&rt->obj, rt);
-				// if (j == 519 && i == -20)
-				// 	o = get_light(&rt->obj, rt);
-				double z = 0.0;
+				double ia_1 = get_light(&rt->obj, rt);
 				rt->dir = init_direction(&rt->objects[k], rt);
-				//z = get_light2(&rt->obj, rt);
-				double ia = o + z;
-				// if (j == 291 && i == 294)
-				// 	printf("black %lf\n", ia);
-				// if (j == 288 && i == 301)
-				// 	printf("norm %lf\n", ia);
+				double ia_2 = get_light2(&rt->obj, rt);
+				double ia = ia_1;// + ia_2;
 				rt->color = get_color(ia, rt->obj);
-				// rt->color = (i + j);
-				// printf("%lf %lf\n%d %d\n", rt->light.inten, rt->light1.inten, i, j);
-
-				// rt->color = get_light2(rt->obj, *rt);
 				mlx_pixel_put(rt->mlx_ptr, rt->win_ptr, j, i, rt->color);
 			}
 			j++;

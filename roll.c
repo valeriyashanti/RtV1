@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 13:27:23 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 15:40:00 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 17:35:49 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,17 @@ double      ray_roll(t_obj *obj, t_rt *rt)
 	t_vec3 rotation;
 	rotation = rt->dir;
 
-	rt->dir.x = rotation.x * cos(0.5) - rotation.y * sin(0.5);
-	rt->dir.y = rotation.x * sin(0.5) + rotation.y * cos(0.5);
-
-
+	rt->dir.x = rotation.x * cos(obj->a_xy) - rotation.y * sin(obj->a_xy);
+	rt->dir.y = rotation.x * sin(obj->a_xy) + rotation.y * cos(obj->a_xy);
 
     k1 = (rt->dir.z * rt->dir.z * obj->a * obj->a) 
-
 	+ (rt->dir.x * rt->dir.x * obj->b * obj->b);
 
-
 	k2 = 2.0 * (rt->dir.z * obj->oc.z * obj->a * obj->a)
-
 	+ (rt->dir.x * obj->oc.x * obj->b * obj->b);
 
-
 	k3 = (obj->oc.z * obj->oc.z * obj->a * obj->a)
-
 	+ (obj->oc.x * obj->oc.x * obj->b * obj->b)
-
 	- (obj->a * obj->a * obj->b * obj->b);
 
 	double desc = k2 * k2 - 4.0 * k1 * k3;

@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:44 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/11 17:47:00 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:23:04 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 # define W_H 600
 # define M_W 300
 # define M_H 300
+
+int TMP1;
+int TMP2;
+int STATE;
 
 typedef struct  s_rt t_rt;
 

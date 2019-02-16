@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 12:19:15 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 15:53:46 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 10:57:30 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		parse_object(char *line, t_rt *rt, int index, int type)
 	{
 		rt->objects[index].type = 0;
 		rt->objects[index].func = &ray_sphere;
-		rt->objects[index].specular = 5.00000000;
+		rt->objects[index].specular = 150.0000;
 	}
 	if (type == 1)
 	{

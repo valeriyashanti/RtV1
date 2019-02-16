@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:41:51 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 15:41:07 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:23:56 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 double 		ray_sphere(t_obj *obj, t_rt *rt)
 {
+
 	double k1;
 	double k2;
 	double k3;
@@ -21,14 +22,20 @@ double 		ray_sphere(t_obj *obj, t_rt *rt)
 	double t2;
 	
 	k1 = vec_sc(rt->dir, rt->dir);
-	k2 = 2 * vec_sc(obj->oc, rt->dir);
+	k2 = 2.0 * vec_sc(obj->oc, rt->dir);
 	k3 = vec_sc(obj->oc, obj->oc) - (obj->radius * obj->radius);
 
 	double desc = k2 * k2 - 4 * k1 * k3;
 	if(desc < 0.0)
+	{
+			if(TMP1)
+		printf("[1] LENGTH: %lf   STATE: %d\n", -1.0, STATE);
+					if(TMP2)
+		printf("[2] LENGTH: %lf   STATE: %d\n", -1.0, STATE);
 		return (-1.0);
-	t1 = (-k2 + sqrt(desc)) / (2 * k1);
-	t2 = (-k2 - sqrt(desc)) / (2 * k1);
+	}
+	t1 = (-k2 + sqrt(desc)) / (2.0 * k1);
+	t2 = (-k2 - sqrt(desc)) / (2.0 * k1);
 
 	double res = INFINITY;
 	if (t1 >= 0.0 && t1 < INFINITY)
@@ -39,9 +46,12 @@ double 		ray_sphere(t_obj *obj, t_rt *rt)
 			res = t2;
 	}
 	else
-	{
 		if (t2 >= 0.0 && t2 < INFINITY)
 			res = t2;
-	}
+
+	if(TMP1)
+		printf("[1] LENGTH: %lf   STATE: %d\n", res, STATE);
+			if(TMP2)
+		printf("[2] LENGTH: %lf   STATE: %d\n", res, STATE);
 	return (res);
 }

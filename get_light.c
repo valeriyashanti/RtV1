@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:45:05 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 14:28:59 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/16 10:57:57 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ int		get_color(double ia, t_obj obj)
 
 double		get_light(t_obj *obj, t_rt *rt)
 {
-	// t_vec3 d; //направление вектора луча
-	// d = vec_minus(rt->init, rt->cam);
-	// d = vec_div(d, vec_modul(d));
+		STATE = 1;
+		
 	t_vec3 p; //точка
 	p = vec_plus(rt->cam, vec_mul(rt->dir, rt->res));
+	
 	t_vec3 n; //нормаль
 	n = vec_minus(obj->dot, p);
 
@@ -80,39 +80,48 @@ double		get_light(t_obj *obj, t_rt *rt)
 	l = vec_minus(p, rt->light.dot);
 
 	t_vec3 l_n;
-	// if (vec_modul)
 	l_n = vec_div(l, vec_modul(l));
 
 	double sc; // cкаляр
 	sc = vec_sc(n_n, l_n);
 	double	ia ; // i / a
 	double ia_left = 0.0000000;
-	//obj->oc = vec_minus(p, c_z);
-	//printf ("sc = %lf\n", sc);
 
 	rt->dir = vec_minus(p, rt->light.dot);
-	rt->dir = vec_div(rt->dir, vec_modul(rt->dir));
+	//ssrt->dir = vec_div(rt->dir, vec_modul(rt->dir));
 
 	int i = 0;
-
-	
-	/* while (i < rt->obj_number)
+	while (i < rt->obj_number)
 	{
 		if (i != rt->index && rt->objects[i].type == 0)
 		{
-			rt->objects[i].oc = vec_minus(p, rt->objects[i].dot);
-			if (rt->objects[i].func(&rt->objects[i], rt) != -1 )
+			rt->objects[i].oc = vec_minus(rt->objects[i].dot, p);
+			double temp = rt->objects[i].func(&rt->objects[i], rt);
+			if (temp != -1 && (fabs(temp) < vec_modul(rt->dir)))
 				sc = -1.000;
 		}
 		i++;
-	} */
-
-
-	//printf ("sc = %lf\n", sc);
-
-	if (sc > -0.00001)
+		// if (i != rt->index && rt->objects[i].type == 0)
+		// {
+		// 	/**/
+		// 	rt->objects[i].oc = vec_minus(p, rt->light.dot);
+		// 		if (TMP1)
+		// 			printf("[1] OC: %lf %lf %lf \n", rt->objects[i].oc.x, rt->objects[i].oc.y, rt->objects[i].oc.z);
+		// 		if (TMP2)
+		// 			printf("[2] OC: %lf %lf %lf \n", rt->objects[i].oc.x, rt->objects[i].oc.y, rt->objects[i].oc.z);
+		// 	if (rt->objects[i].func(&rt->objects[i], rt) < INFINITY && rt->objects[i].func(&rt->objects[i], rt) != -1)
+		// 	{
+		// 		if (TMP1)
+		// 			printf("[1] ALERT!\n");
+		// 		if (TMP2)
+		// 			printf("[2] ALERT!\n");
+		// 		sc = -1.000;
+		// 	}
+		// }
+		// i++;
+	}
+	if (sc > -0.000001)
 	{
-		//printf("sc > 0 \n");
 		ia = rt->light.inten * (sc / (vec_modul(l) * vec_modul(n_n)));
 		t_vec3 v;
 		v = vec_minus(p, rt->cam);

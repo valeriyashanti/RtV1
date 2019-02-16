@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:58 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 14:56:41 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:10:34 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void    on_button_press(int key, t_rt *rt)
 		rt->light.dot.z += 0.2;
 	if (key == 3)
 		rt->light.dot.z -= 0.2;
-	printf("%lf %lf %lf\n", rt->light.dot.x, rt->light.dot.y, rt->light.dot.z);
+	//	printf("%lf %lf %lf\n", rt->light.dot.x, rt->light.dot.y, rt->light.dot.z);
 }
 
 int    on_button_press_2(int key, t_rt *rt)
@@ -96,20 +96,18 @@ int    on_button_press_2(int key, t_rt *rt)
 		rt->rot_xz -= 0.1;
 	if (key == 53)
 		exit(1);
-	if (key == 18)
-		rt->objects[1].dot.x += 0.1;
-	if (key == 19)
-		rt->objects[1].dot.x -= 0.1;
-	if (key == 20)
-		rt->objects[1].dot.y += 0.1;
-	if (key == 21)
-		rt->objects[1].dot.y -= 0.1;
-	if (key == 23)
-		rt->objects[1].dot.z += 0.1;
-	if (key == 22)
-		rt->objects[1].dot.z -= 0.1;
-	printf("%lf %lf %lf\n", rt->objects[1].dot.x, rt->objects[1].dot.y, rt->objects[1].dot.z);
-	
+	// if (key == 18)
+	// 	rt->objects[1].dot.x += 0.1;
+	// if (key == 19)
+	// 	rt->objects[1].dot.x -= 0.1;
+	// if (key == 20)
+	// 	rt->objects[1].dot.y += 0.1;
+	// if (key == 21)
+	// 	rt->objects[1].dot.y -= 0.1;
+	// if (key == 23)
+	// 	rt->objects[1].dot.z += 0.1;
+	// if (key == 22)
+	// 	rt->objects[1].dot.z -= 0.1;	
 	return (0);
 }
 

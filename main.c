@@ -6,7 +6,7 @@
 /*   By: gkessler <gkessler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 17:13:26 by gkessler          #+#    #+#             */
-/*   Updated: 2019/02/15 13:16:06 by gkessler         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:52:41 by gkessler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_main(t_rt *rt)
 	rt->win_ptr = mlx_new_window(rt->mlx_ptr, W_W, W_H, "RTv1");
 	rt->light1.dot.x = -0.4;
 	rt->light1.dot.y = 0.0;
-	rt->light1.dot.z = 2.5;
+	rt->light1.dot.z = 0.0;
 	rt->light1.inten = 0.5;
 }
 
